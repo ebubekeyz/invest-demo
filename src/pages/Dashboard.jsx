@@ -475,7 +475,7 @@ const Dashboard = () => {
       });
       const { username } = response.data.user;
       setUsername(username);
-      setUserIdd(`https://trex-holding.com/register/${username}`);
+      setUserIdd(`https://invest-demo-site.netlify.app/register/${username}`);
     } catch (error) {
       console.log(error);
       console.log(error.response.data.msg);

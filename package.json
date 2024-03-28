@@ -1,7 +1,7 @@
 {
   "name": "invest",
   "private": true,
-  "proxy": "https://trex-holding-server.com",
+  "proxy": "https://invest-demo-server.onrender.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
