@@ -6,7 +6,9 @@ import { mainFetch } from '../utils';
 import { toast } from 'react-toastify';
 
 const EditDeposit = () => {
-  const [status, setStatus] = useState('paid');
+  const [update, setUpdate] = useState({
+    status: 'paid',
+  });
   const [isLoad, setIsLoad] = useState('Approve');
 
   const params = window.location.search;
@@ -20,7 +22,7 @@ const EditDeposit = () => {
       const response = await mainFetch.patch(
         `/api/v1/payReceipt/${id}`,
         {
-          status: status,
+          status: update.status,
         },
         { withCredentials: true }
       );
@@ -47,9 +49,9 @@ const EditDeposit = () => {
                 type="text"
                 className="input"
                 name="status"
-                value={status}
+                value={update.status}
                 onChange={(e) => {
-                  setStatus({ ...status, [e.target.name]: e.target.value });
+                  setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
             </div>

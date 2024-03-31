@@ -10,9 +10,8 @@ const Wrapper = styled.section`
     padding-bottom: 0.2rem;
   }
   .form-main {
-    background: rgb(19, 17, 17);
     border-radius: 0.4rem;
-    border: 1px solid var(--grey-600);
+
     padding: 2rem 1rem;
     margin-bottom: 7rem;
   }
@@ -25,20 +24,34 @@ const Wrapper = styled.section`
   .btn-info {
     text-align: center;
   }
-  .form-container {
-    max-width: 50rem;
-    margin: 0 auto;
-    margin-top: 1rem;
+  .updateForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 85vw;
+    max-width: 30rem;
+    margin: 1rem auto;
+    color: white;
+  }
+  .change {
+    margin-top: 4rem;
+  }
+  .updateForm h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 0;
+    font-weight: bold;
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    margin: 0.5rem 0;
   }
   .input {
-    border-radius: 0.4rem;
-    width: 100%;
-    background: rgb(19, 17, 17);
-    border: 1px solid var(--grey-700);
-    font-size: 1.2rem;
-    padding: 0.4rem;
     color: white;
-    margin-top: 0.7rem;
+    width: 100%;
+    padding: 0.5rem;
+    background: rgb(34, 33, 33);
+    border: 1px solid var(--grey-400);
   }
   .top2 {
     margin: 1.5rem 0;

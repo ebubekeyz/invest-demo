@@ -475,7 +475,9 @@ const Dashboard = () => {
       });
       const { username } = response.data.user;
       setUsername(username);
-      setUserIdd(`https://invest-demo-site.netlify.app/register/${username}`);
+      setUserIdd(
+        `https://invest-demo-server.onrender.com/register/${username}`
+      );
     } catch (error) {
       console.log(error);
       console.log(error.response.data.msg);
@@ -707,6 +709,7 @@ const Dashboard = () => {
   return (
     <Wrapper>
       <Navbar2 />
+
       <div className="container">
         <Sidebar className="" />
         <section className="dashboard">
@@ -798,7 +801,7 @@ const Dashboard = () => {
               </article>
             </div>
 
-            <div className="acc-bal" id="acc-bal-1">
+            {/* <div className="acc-bal" id="acc-bal-1">
               <article>
                 <div className="circle">
                   <h3 id="circle-one"></h3>
@@ -817,8 +820,51 @@ const Dashboard = () => {
                   <h4>{formatter.format(0)}</h4>
                 )}
               </article>
-            </div>
+            </div> */}
           </aside>
+
+          <article className="log">
+            <Link to="/withdrawLog" className="log-inner">
+              {' '}
+              <GiTwoCoins className="log-icon" />
+              <p>Withdraw Log</p>
+            </Link>
+
+            <Link to="/depositLog" className="log-inner">
+              {' '}
+              <GiTwoCoins className="log-icon" />
+              <p>Deposit Log</p>
+            </Link>
+
+            <Link to="/investLog" className="log-inner">
+              {' '}
+              <GiTwoCoins className="log-icon" />
+              <p>Invest Log</p>
+            </Link>
+          </article>
+
+          <div className="coin-first">
+            <div className="coin-second">
+              <iframe
+                src="https://widget.coinlib.io/widget?type=chart&theme=light&coin_id=859&pref_coin_id=1505"
+                width="100%"
+                height="536px"
+                scrolling="auto"
+                marginwidth="0"
+                marginheight="0"
+                frameborder="0"
+                border="0"
+                className="iframe1"
+              ></iframe>
+            </div>
+            <div className="iframe2">
+              <a href="https://coinlib.io" target="_blank" clasName="iframe3">
+                Cryptocurrency Prices
+              </a>
+              &nbsp;by Coinlib
+            </div>
+          </div>
+
           <article className="upgrade-main">
             <h3>Your Current Level</h3>
             <div className="upgrade">

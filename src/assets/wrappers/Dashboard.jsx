@@ -10,6 +10,7 @@ const Wrapper = styled.section`
   }
   .upgrade-main {
     margin-bottom: 3rem;
+    margin-top: 3rem;
   }
   .upgrade-main h3 {
     color: white;
@@ -69,6 +70,88 @@ const Wrapper = styled.section`
     gap: 12px;
   }
 
+  .log {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .log-inner {
+    width: 6rem;
+    height: 7rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: linear-gradient(
+      to right,
+      rgba(17, 48, 226, 0.8),
+      rgba(226, 48, 17, 0.2)
+    );
+  }
+
+  .log-icon {
+    color: white;
+    font-size: 2rem;
+  }
+
+  .coin-first {
+    height: 560px;
+    background-color: #ffffff;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #56667f;
+    border-radius: 4px;
+    text-align: right;
+    line-height: 14px;
+    font-size: 12px;
+    font-feature-settings: normal;
+    text-size-adjust: 100%;
+    box-shadow: inset 0 -20px 0 0 #56667f;
+    padding: 1px;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+  }
+
+  .coin-second {
+    height: 540px;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+  }
+
+  .iframe1 {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 14px;
+    color: #ffffff;
+    line-height: 14px;
+    font-weight: 400;
+    font-size: 11px;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    width: 100%;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+  }
+
+  .iframe2 {
+    color: #ffffff;
+    line-height: 14px;
+    font-weight: 400;
+    font-size: 11px;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    width: 100%;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+  }
+
+  .iframe3 {
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 11px;
+  }
   @media screen and (min-width: 800px) {
     .pending {
       grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -76,6 +159,9 @@ const Wrapper = styled.section`
     .dashboard {
       width: 100%;
       margin: 0;
+    }
+    .log {
+      display: none;
     }
     .container {
       display: grid;

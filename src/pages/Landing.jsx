@@ -9,6 +9,7 @@ import Wrapper2 from '../assets/wrappers/AboutPage';
 import Wrapper3 from '../assets/wrappers/Landing2';
 import Wrapper4 from '../assets/wrappers/Card';
 import Wrapper5 from '../assets/wrappers/Coins';
+import Wrapper8 from '../assets/wrappers/Chart';
 import { FaArrowRight } from 'react-icons/fa';
 import image1 from '../assets/mission.jpg';
 import image2 from '../assets/operation.jpg';
@@ -50,33 +51,7 @@ import tetherImg from '../assets/tether.png';
 import trxImg from '../assets/trx.png';
 import daiImg from '../assets/dai.png';
 
-const API = import.meta.env.VITE_COIN_API;
-
-// const coinsQuery = () => {
-//   return {
-//     queryKey: ['coins'],
-//     queryFn: async () => {
-//       const response = await coinFetch.get(`api/coins`);
-//       return { coins: response.data.coins };
-//     },
-//   };
-// };
-
-// export const loader = (queryClient) => async () => {
-//   await queryClient.ensureQueryData(coinsQuery());
-//   return { coins: response.data.coins  };
-// };
-
-export const loader = async () => {
-  const response = await coinFetch.get(`api/coins`);
-
-  return { coins: response.data.coins };
-};
-
 const Landing = () => {
-  const { coins } = useLoaderData();
-  // const { coins } = useQuery(coinsQuery());
-
   const formatter = new Intl.NumberFormat('en-DE', {
     style: 'currency',
     currency: 'EUR',
@@ -84,136 +59,36 @@ const Landing = () => {
 
   return (
     <>
+      <div style={{ textAlign: 'center' }} id="google_translate_element"></div>
       {/* <Submenu /> */}
       <Hero />
       <Wrapper5>
-        <section className="coins-main">
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={tetherImg} alt="btc-image" />
-              <h5>{coins[0].name}</h5>
-              <span>[{coins[0].symbol}]</span>
-              <span>{formatter.format(Number(coins[0].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: Number(coins[0].delta_24h) >= 0 ? 'green' : 'red',
-                }}
-              >
-                {coins[0].delta_24h}%
-              </span>
+        <section>
+          <div className="coin-api-1">
+            <div className="coin-api-2">
+              <iframe
+                src="https://widget.coinlib.io/widget?type=horizontal_v2&theme=light&pref_coin_id=1505&invert_hover="
+                width="100%"
+                height="36px"
+                scrolling="auto"
+                marginwidth="0"
+                marginheight="0"
+                frameborder="0"
+                border="0"
+                className="coin-api-3"
+              ></iframe>
             </div>
-          </article>
-
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={btcImg} alt="btc-image" />
-              <h5>{coins[1].name}</h5>
-              <span>[{coins[1].symbol}]</span>
-              <span>{formatter.format(Number(coins[1].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: Number(coins[1].delta_24h) < 0 ? 'red' : 'green',
-                }}
+            <div className="coin-api-4">
+              <a
+                href="https://coinlib.io"
+                target="_blank"
+                className="coin-api-5"
               >
-                {coins[1].delta_24h}%
-              </span>
+                Cryptocurrency Prices
+              </a>
+              &nbsp;by Coinlib
             </div>
-          </article>
-
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={ethImg} alt="btc-image" />
-              <h5>{coins[2].name}</h5>
-              <span>[{coins[2].symbol}]</span>
-              <span>{formatter.format(Number(coins[2].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: coins[2].delta_24h < 0 ? 'red' : 'green',
-                }}
-              >
-                {coins[2].delta_24h}%
-              </span>
-            </div>
-          </article>
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={bnbImg} alt="btc-image" />
-              <h5>{coins[3].name}</h5>
-              <span>[{coins[3].symbol}]</span>
-              <span>{formatter.format(Number(coins[3].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: coins[3].delta_24h < 0 ? 'red' : 'green',
-                }}
-              >
-                {coins[3].delta_24h}%
-              </span>
-            </div>
-          </article>
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={dogeImg} alt="btc-image" />
-              <h5>{coins[4].name}</h5>
-              <span>[{coins[4].symbol}]</span>
-              <span>{formatter.format(Number(coins[4].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: coins[4].delta_24h < 0 ? 'red' : 'green',
-                }}
-              >
-                {coins[4].delta_24h}%
-              </span>
-            </div>
-          </article>
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={xrpImg} alt="btc-image" />
-              <h5>{coins[8].name}</h5>
-              <span>[{coins[8].symbol}]</span>
-              <span>{formatter.format(Number(coins[8].price).toFixed(2))}</span>
-              <span
-                style={{
-                  color: coins[8].delta_24h < 0 ? 'red' : 'green',
-                }}
-              >
-                {coins[8].delta_24h}%
-              </span>
-            </div>
-          </article>
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={ltcImg} alt="btc-image" />
-              <h5>{coins[15].name}</h5>
-              <span>[{coins[15].symbol}]</span>
-              <span>
-                {formatter.format(Number(coins[15].price).toFixed(2))}
-              </span>
-              <span
-                style={{
-                  color: coins[15].delta_24h < 0 ? 'red' : 'green',
-                }}
-              >
-                {coins[15].delta_24h}%
-              </span>
-            </div>
-          </article>
-          <article className="coins">
-            <div className="coins-inner">
-              <img src={trxImg} alt="btc-image" />
-              <h5>{coins[24].name}</h5>
-              <span>[{coins[24].symbol}]</span>
-              <span>
-                {formatter.format(Number(coins[24].price).toFixed(2))}
-              </span>
-              <span
-                style={{
-                  color: Number(coins[24].delta_24h) >= 0 ? 'green' : 'red',
-                }}
-              >
-                {coins[24].delta_24h}%
-              </span>
-            </div>
-          </article>
+          </div>
         </section>
       </Wrapper5>
 
@@ -802,6 +677,30 @@ const Landing = () => {
       </Wrapper>
 
       <InvestmentCard />
+
+      <Wrapper8>
+        <div className="chart1">
+          <div className="chart5">
+            <iframe
+              src="https://widget.coinlib.io/widget?type=full_v2&theme=light&cnt=6&pref_coin_id=1505&graph=yes"
+              width="100%"
+              height="409px"
+              scrolling="auto"
+              marginwidth="0"
+              marginheight="0"
+              frameborder="0"
+              border="0"
+              className="chart2"
+            ></iframe>
+          </div>
+          <div className="chart3">
+            <a href="https://coinlib.io" target="_blank" className="chart4">
+              Cryptocurrency Prices
+            </a>
+            &nbsp;by Coinlib
+          </div>
+        </div>
+      </Wrapper8>
 
       <section>
         <h2

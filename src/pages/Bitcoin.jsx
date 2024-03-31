@@ -116,6 +116,7 @@ const Bitcoin = () => {
   return (
     <Wrapper>
       <Navbar2 />
+
       <div className="container">
         <Sidebar />
         <div className="section-center">

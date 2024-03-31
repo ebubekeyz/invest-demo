@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  .coin-api-1 {
-    height: 62px;
+  width: 90vw;
+  max-width: 1170px;
+  margin: 0 auto;
+  .chart1 {
+    height: 433px;
     background-color: #ffffff;
     overflow: hidden;
     box-sizing: border-box;
@@ -10,31 +13,20 @@ const Wrapper = styled.div`
     border-radius: 4px;
     text-align: right;
     line-height: 14px;
-    block-size: 62px;
     font-size: 12px;
     font-feature-settings: normal;
     text-size-adjust: 100%;
     box-shadow: inset 0 -20px 0 0 #56667f;
-    padding: 1px;
     padding: 0px;
     margin: 0px;
     width: 100%;
   }
-
-  .coin-api-2 {
-    height: 40px;
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-  }
-
-  .coin-api-3 {
+  .chart2 {
     border: 0;
     margin: 0;
     padding: 0;
   }
-
-  .coin-api-4 {
+  .chart3 {
     color: #ffffff;
     line-height: 14px;
     font-weight: 400;
@@ -44,12 +36,17 @@ const Wrapper = styled.div`
     width: 100%;
     font-family: Verdana, Tahoma, Arial, sans-serif;
   }
-
-  .coin-api-5 {
+  .chart4 {
     font-weight: 500;
     color: #ffffff;
     text-decoration: none;
     font-size: 11px;
+  }
+  .chart5 {
+    height: 413px;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
   }
 `;
 

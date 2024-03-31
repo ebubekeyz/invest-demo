@@ -44,7 +44,7 @@ import {
   Members,
   UserDash,
 } from './pages';
-import { loader as landingLoader } from './pages/Landing.jsx';
+
 import { action as actionLoader } from './pages/Login.jsx';
 // import { action as actionLoader2 } from './pages/Register.jsx';
 import { action as actionLoader5 } from './pages/SignUp.jsx';
@@ -64,7 +64,6 @@ const router = createBrowserRouter([
         index: true,
         element: <Landing />,
         errorElement: <SinglePageError />,
-        loader: landingLoader,
       },
       {
         path: '/about',

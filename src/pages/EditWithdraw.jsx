@@ -6,11 +6,11 @@ import { mainFetch } from '../utils';
 import { toast } from 'react-toastify';
 
 const EditWithdraw = () => {
-  const [status, setStatus] = useState({
-    sent: 'sent',
-    batch: '',
-  });
   const [isLoad, setIsLoad] = useState('confirm');
+  const [update, setUpdate] = useState({
+    status: 'sent',
+    withdrawalCode: '',
+  });
 
   const params = window.location.search;
   const id = new URLSearchParams(params).get('id');
@@ -20,12 +20,12 @@ const EditWithdraw = () => {
     e.preventDefault();
     try {
       setIsLoad('confirming...');
-      console.log(status.batch);
+
       const response = await mainFetch.patch(
         `/api/v1/withdraw/${id}`,
         {
-          status: status.status,
-          withdrawalCode: status.batch,
+          status: update.status,
+          withdrawalCode: update.withdrawalCode,
         },
         { withCredentials: true }
       );
@@ -52,27 +52,24 @@ const EditWithdraw = () => {
                 type="text"
                 className="input"
                 name="status"
-                value={status.status}
+                value={update.status}
                 onChange={(e) => {
-                  setStatus({ ...status, [e.target.name]: e.target.value });
+                  setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
             </div>
 
             <div className="inner">
-              <label htmlFor="batch" className="label">
-                Withdrawal Batch
+              <label htmlFor="withdrawalCode" className="label">
+                WithdrawalBatch
               </label>
               <input
                 type="text"
-                name="batch"
-                className="form-input input"
-                value={status.batch}
+                className="input"
+                name="withdrawalCode"
+                value={update.withdrawalCode}
                 onChange={(e) => {
-                  setStatus({
-                    ...status,
-                    [e.target.name]: e.target.value,
-                  });
+                  setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
             </div>

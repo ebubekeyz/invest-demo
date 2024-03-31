@@ -10,36 +10,24 @@ import Sidebar from '../components/Sidebar';
 import Navbar2 from '../components/Navbar2';
 
 const Settings = () => {
-  const [isLoading, setIsLoading] = useState('update');
-  const [user, setUser] = useState({
-    // fullName: '',
-    // username: '',
-    // email: '',
-    // phone: '',
-    // country: '',
-    coins: '',
-    walletAddress: '',
-    // city: '',
-    // zip: '',
-    // state: '',
-  });
-
-  const [id, setId] = useState({
+  const [isLoad1, setIsLoad1] = useState('update');
+  const [update, setUpdate] = useState({
     fullName: '',
     username: '',
     email: '',
     phone: '',
     country: '',
+    city: '',
+    state: '',
     coins: '',
     walletAddress: '',
-    city: '',
-    zip: '',
-    state: '',
-    userId: '',
   });
+
   const backHandler = () => {
     window.history.back();
   };
+
+  const [userId, setUserId] = useState('');
 
   const showId = async () => {
     try {
@@ -47,32 +35,8 @@ const Settings = () => {
         withCredentials: true,
       });
 
-      const {
-        userId,
-        fullName,
-        username,
-        email,
-        phone,
-        country,
-        city,
-        coins,
-        walletAddress,
-        zip,
-        state,
-      } = response.data.user;
-      setId({
-        fullName: fullName,
-        username: username,
-        email: email,
-        phone: phone,
-        country: country,
-        coins: coins,
-        walletAddress: walletAddress,
-        city: city,
-        zip: zip,
-        state: state,
-        userId: userId,
-      });
+      console.log(response.data.user);
+      setUserId(response.data.user.userId);
     } catch (error) {
       console.log(error);
     }
@@ -82,60 +46,93 @@ const Settings = () => {
     showId();
   }, [showId]);
 
+  const [info, setInfo] = useState({
+    fullName: '',
+    city: '',
+    state: '',
+    walletAddress: '',
+    coins: '',
+    country: '',
+    phone: '',
+  });
+
+  console.log(userId);
+
+  const infoFetch = async () => {
+    try {
+      const response = await mainFetch.get(`/api/v1/users/${userId}`, {
+        withCredentials: true,
+      });
+
+      setInfo({
+        fullName: response.data.user.fullName,
+        city: response.data.user.city,
+        state: response.data.user.state,
+        walletAddress: response.data.user.walletAddress,
+        coins: response.data.user.coins,
+        country: response.data.user.country,
+        phone: response.data.user.phone,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    infoFetch();
+  }, [infoFetch]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      setIsLoading('Updating..');
+      setIsLoad1('updating...');
       const response = await mainFetch.patch(
-        `/api/v1/users/${id.userId}`,
+        `/api/v1/users/${userId}`,
         {
-          fullName: user.fullName,
-          username: user.username,
-          //   email: user.email,
-          // phone: user.phone,
-          coins: user.coins,
-          walletAddress: user.walletAddress,
-          // country: user.country,
-          // city: user.city,
-          // zip: user.zip,
-          // state: user.state,
+          fullName: update.fullName,
+          // username: update.username,
+          //   email: update.email,
+          phone: update.phone,
+          city: update.city,
+          state: update.state,
+          country: update.country,
+          coins: update.coins,
+          walletAddress: update.walletAddress,
+          status: update.status,
         },
         {
           withCredentials: true,
         }
       );
-      setIsLoading('Updated');
-      setUser({
-        // fullName: id.fullName,
-        // username: id.username,
-        // email: '',
-        // phone: id.phone,
-        // country: id.country,
-        coins: id.coins,
-        walletAddress: id.walletAddress,
-        // city: id.city,
-        // zip: id.zip,
-        // state: id.state,
-        // userId: id.userId,
-      });
       toast.success('Update Successful');
+      setUpdate({
+        fullName: '',
+        // username: '',
+        // email: '',
+        phone: '',
+        coins: '',
+        walletAddress: '',
+        country: '',
+        city: '',
+        state: '',
+      });
+      setIsLoad1('update complete');
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.msg);
-      setIsLoading('update');
     }
   };
 
   return (
     <Wrapper>
       <Navbar2 />
+
       <div className="container">
         <Sidebar />
         <section className="settings">
           <div className="section-center">
             <article className="top">
-              <h4>Authentication</h4>
+              <h4>Profile Settings</h4>
 
               <div className="top-inner">
                 <span className="space">
@@ -146,193 +143,116 @@ const Settings = () => {
               </div>
             </article>
 
-            <article className="top2 top">
-              <h3>Profile setting</h3>
-
+            <article className="top">
               <Link to="/changePassword" className="top-inner">
-                <span className="space">
+                <span className="change">
                   {' '}
                   <GoShieldLock className="back-icon" onClick={backHandler} />
+                  Change Password
                 </span>
-                <span className="change">Change Password</span>
               </Link>
             </article>
 
-            <article className="form-main">
-              <form onSubmit={handleSubmit}>
-                {/* <div className="form-container">
-                  <label htmlFor="firstName" className="label">
-                    Full Name
+            <article>
+              <form onSubmit={handleSubmit} className="updateForm">
+                <h4>Update User</h4>
+                <div className="inner">
+                  <label htmlFor="fullName" className="label">
+                    FullName
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.fullName}
                     name="fullName"
-                    placeholder={id.fullName}
-                    value={user.fullName}
+                    value={update.name}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="form-container">
-                  <label htmlFor="username" className="label">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    className="input"
-                    name="username"
-                    placeholder={id.username}
-                    value={user.username}
-                    onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-
-                <div className="form-container">
-                  <label htmlFor="email" className="label">
-                    Email
-                  </label>
-                  <input
-                    readOnly
-                    type="text"
-                    className="input"
-                    name="email"
-                    placeholder={id.email}
-                    value={user.email}
-                    onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="phone" className="label">
                     Phone
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.phone}
                     name="phone"
-                    placeholder={id.phone}
-                    value={user.phone}
+                    value={update.phone}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="country" className="label">
                     Country
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.country}
                     name="country"
-                    placeholder={id.country}
-                    value={user.country}
+                    value={update.country}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="city" className="label">
                     City
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.city}
                     name="city"
-                    placeholder={id.city}
-                    value={user.city}
+                    value={update.city}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="form-container">
-                  <label htmlFor="zip" className="label">
-                    Zip
-                  </label>
-                  <input
-                    type="text"
-                    className="input"
-                    name="zip"
-                    placeholder={id.zip}
-                    value={user.zip}
-                    onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="state" className="label">
                     State
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.state}
                     name="state"
-                    placeholder={id.state}
-                    value={user.state}
+                    value={update.state}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
-                </div> */}
+                </div>
 
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="state" className="label">
                     Coins
                   </label>
                   <input
                     type="text"
                     className="input"
+                    placeholder={info.coins}
                     name="coins"
-                    placeholder={id.coins}
-                    value={user.coins}
+                    value={update.coins}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="form-container">
+                <div className="inner">
                   <label htmlFor="state" className="label">
                     Wallet Address
                   </label>
@@ -340,22 +260,17 @@ const Settings = () => {
                     type="text"
                     className="input"
                     name="walletAddress"
-                    placeholder={id.walletAddress}
-                    value={user.walletAddress}
+                    placeholder={info.walletAddress}
+                    value={update.walletAddress}
                     onChange={(e) => {
-                      setUser({
-                        ...user,
-                        [e.target.name]: e.target.value,
-                      });
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
 
-                <div className="btn-info">
-                  <button type="submit" className="update-btn btn">
-                    {isLoading}
-                  </button>
-                </div>
+                <button type="submit" className="btn">
+                  {isLoad1}
+                </button>
               </form>
             </article>
           </div>

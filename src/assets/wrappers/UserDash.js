@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   background: rgb(39, 37, 37);
   padding-bottom: 8rem;
+  overflow-x: hidden;
 
   .balance h4 {
     font-size: 1.4rem;

@@ -9,6 +9,7 @@ const InvestDash = () => {
   return (
     <Wrapper>
       <Navbar2 />
+      
       <div className="container">
         <Sidebar />
         <section className="investDash">

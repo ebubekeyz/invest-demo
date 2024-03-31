@@ -7,6 +7,8 @@ import { mainFetch } from '../utils';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const WithdrawLog = () => {
+  //new
+
   const [receipt, setReceipt] = useState([]);
   const [show, setShow] = useState(false);
 
@@ -46,6 +48,7 @@ const WithdrawLog = () => {
   return (
     <Wrapper>
       <Navbar2 />
+      
       <div className="container">
         <Sidebar />
         <section className="section-center">
@@ -83,7 +86,7 @@ const WithdrawLog = () => {
                           <td>{withdrawalMethod}</td>
                           <td>{formatter.format(Number(amount).toFixed(2))}</td>
                           <td>{walletAddress}</td>
-                          <td>€{withdrawalCode}</td>
+                          <td>{withdrawalCode}</td>
                           <td>€{status}</td>
                           <td>
                             {new Date(createdAt).getDate()}/

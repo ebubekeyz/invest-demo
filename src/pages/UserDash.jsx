@@ -217,13 +217,13 @@ const UserDash = () => {
       const response = await mainFetch.patch(
         `/api/v1/users/${id}`,
         {
-          // fullName: update.fullName,
+          fullName: update.fullName,
           // username: update.username,
           //   email: update.email,
-          // phone: update.phone,
-          // city: update.city,
-          // state: update.state,
-          // country: update.country,
+          phone: update.phone,
+          city: update.city,
+          state: update.state,
+          country: update.country,
           coins: update.coins,
           walletAddress: update.walletAddress,
           status: update.status,
@@ -234,15 +234,15 @@ const UserDash = () => {
       );
       toast.success('Update Successful');
       setUpdate({
-        // fullName: '',
+        fullName: '',
         // username: '',
         // email: '',
-        // phone: '',
+        phone: '',
         coins: '',
         walletAddress: '',
-        // country: '',
-        // city: '',
-        // state: '',
+        country: '',
+        city: '',
+        state: '',
       });
       setIsLoad1('update complete');
     } catch (error) {
@@ -594,6 +594,159 @@ const UserDash = () => {
   const month2 = date2.getMonth();
   const year2 = date2.getFullYear();
 
+  const [isLoad9, setIsLoad9] = useState('Remove Balance');
+  const removeWithdraw = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoad9('Balance Removing...');
+      const response = await mainFetch.delete(
+        `/api/v1/withdraw/${id}/deleteUserWithdraw`,
+        { withCredentials: true }
+      );
+      setIsLoad9('withdraw Removed');
+      toast.success('Balance Removed');
+    } catch (error) {
+      console.log(error);
+      setIsLoad9('Balance Bonus');
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const removeEarning = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoad9('Balance Removing...');
+      const response = await mainFetch.delete(
+        `/api/v1/earning/${id}/deleteUserEarning`,
+        { withCredentials: true }
+      );
+      setIsLoad9('Balance Removed');
+      toast.success('Balance Removed');
+    } catch (error) {
+      console.log(error);
+      setIsLoad9('Balance Bonus');
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const [isLoad10, setIsLoad10] = useState('Remove Bonus');
+  const removePercentage = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoad10('Bonus Removing...');
+      const response = await mainFetch.delete(
+        `/api/v1/percentage/${id}/deleteUserPercentage`,
+        { withCredentials: true }
+      );
+      setIsLoad10('Bonus Removed');
+      toast.success('Bonus Removed');
+    } catch (error) {
+      console.log(error);
+      setIsLoad10('Remove Bonus');
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const [isLoad11, setIsLoad11] = useState('Remove Penalty');
+  const removePenalty = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoad11('Penalty Removing...');
+      const response = await mainFetch.delete(
+        `/api/v1/penalty/${id}/deleteUserPenalty`,
+        { withCredentials: true }
+      );
+      setIsLoad11('Penalty Removed');
+      toast.success('Penalty Removed');
+    } catch (error) {
+      console.log(error);
+      setIsLoad11('Remove Penalty');
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const [isLoad15, setIsLoad15] = useState('Delete Investment Account');
+
+  const one = async () => {
+    setIsLoad15('Deleting Investment Account');
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/payReceipt/${id}/deleteUserPayReceipt`,
+        { withCredentials: true }
+      );
+      setIsLoad15('Deleted');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const two = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/withdraw/${id}/deleteUserWithdraw`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const three = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/earning/${id}/deleteUserEarning`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const four = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/percentage/${id}/deleteUserPercentage`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const five = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/penalty/${id}/deleteUserPenalty`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteInvestFunc = (e) => {
+    e.preventDefault();
+    Promise.all([one(), two(), three(), four(), five()]).then(() =>
+      toast.success('Investment Account Deleted')
+    );
+  };
+
+  const [isLoad16, setIsLoad16] = useState('Delete User');
+  const deleteUser = async (e) => {
+    e.preventDefault();
+    setIsLoad16('Deleting User...');
+    try {
+      const response = await mainFetch.delete(`/api/v1/users/${id}`, {
+        withCredentials: true,
+      });
+      toast.success('User Account Deleted')
+      setIsLoad16('User Account Deleted');
+    } catch (error) {
+      console.log(error);
+      setIsLoad16('Delete User');
+    }
+  };
+
   return (
     <Wrapper>
       <Navbar3 />
@@ -774,7 +927,7 @@ const UserDash = () => {
 
           <form onSubmit={handleSubmit1} className="updateForm">
             <h4>Update User</h4>
-            {/* <div className="inner">
+            <div className="inner">
               <label htmlFor="fullName" className="label">
                 FullName
               </label>
@@ -790,7 +943,7 @@ const UserDash = () => {
               />
             </div>
 
-            <div className="inner">
+            {/* <div className="inner">
               <label htmlFor="username" className="label">
                 Username
               </label>
@@ -804,7 +957,7 @@ const UserDash = () => {
                   setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
-            </div>
+            </div> */}
 
             <div className="inner">
               <label htmlFor="phone" className="label">
@@ -868,7 +1021,7 @@ const UserDash = () => {
                   setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
-            </div> */}
+            </div>
 
             <div className="inner">
               <label htmlFor="state" className="label">
@@ -1011,6 +1164,12 @@ const UserDash = () => {
             </button>
           </form>
 
+          <div style={{ textAlign: 'center' }}>
+            <button onClick={removeEarning} type="button" className="btn">
+              {isLoad9}
+            </button>
+          </div>
+
           <form onSubmit={handleSubmit5} className="change updateForm">
             <h4>Add Referral Bonus</h4>
             <div className="inner">
@@ -1037,6 +1196,17 @@ const UserDash = () => {
             </button>
           </form>
 
+          <div style={{ textAlign: 'center' }}>
+            <button
+              style={{ textAlign: 'center' }}
+              onClick={removePercentage}
+              type="button"
+              className="btn"
+            >
+              {isLoad10}
+            </button>
+          </div>
+
           <form onSubmit={handleSubmit6} className="change updateForm">
             <h4>Add Penalty</h4>
             <div className="inner">
@@ -1062,6 +1232,34 @@ const UserDash = () => {
               {isLoad6}
             </button>
           </form>
+
+          <div style={{ textAlign: 'center' }}>
+            <button onClick={removePenalty} type="button" className="btn">
+              {isLoad11}
+            </button>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <button
+              onClick={deleteInvestFunc}
+              style={{ background: 'red', color: 'white' }}
+              type="submit"
+              className="btn"
+            >
+              {isLoad15}
+            </button>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <button
+              onClick={deleteUser}
+              style={{ background: 'red', color: 'white' }}
+              type="submit"
+              className="btn"
+            >
+              {isLoad16}
+            </button>
+          </div>
         </section>
       </div>
     </Wrapper>
