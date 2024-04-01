@@ -18,7 +18,7 @@ const HomeLayout = () => {
       {/* <SubNav />
       <Line /> */}
       <Navbar01 />
-      <div style={{ textAlign: 'center' }} id="google_translate_element"></div>
+
       <section className="page">
         {isPageLoading ? (
           <aside className="loading-cont">
