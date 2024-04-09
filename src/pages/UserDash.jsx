@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import Navbar3 from '../components/Navbar3';
 import MembersNavbar from '../components/MembersNavbar';
 import { IoPower } from 'react-icons/io5';
+import moment from 'moment';
 
 const UserDash = () => {
   const [user, setUser] = useState([]);
@@ -46,6 +47,7 @@ const UserDash = () => {
     _id: idd,
   } = user;
 
+  const newDate = createdAt;
   const date = new Date(createdAt);
 
   const day = date.getDate();
@@ -739,7 +741,7 @@ const UserDash = () => {
       const response = await mainFetch.delete(`/api/v1/users/${id}`, {
         withCredentials: true,
       });
-      toast.success('User Account Deleted')
+      toast.success('User Account Deleted');
       setIsLoad16('User Account Deleted');
     } catch (error) {
       console.log(error);
@@ -810,9 +812,7 @@ const UserDash = () => {
               Started:{' '}
               <span>
                 {currentDeposit.status === 'paid' ? (
-                  <span>
-                    {day2}/{month2 + 1}/{year2}
-                  </span>
+                  <span>{moment(amount.update).calendar()}</span>
                 ) : (
                   'N/A'
                 )}
@@ -823,7 +823,9 @@ const UserDash = () => {
               <span>
                 {currentDeposit.status === 'paid' ? (
                   <span>
-                    {day2 + currentDeposit.days}/{month2 + 1}/{year2}
+                    {moment(amount.update)
+                      .add(currentDeposit.days, 'days')
+                      .calendar()}
                   </span>
                 ) : (
                   'N/A'
@@ -844,10 +846,7 @@ const UserDash = () => {
             </p>
 
             <p>
-              Joined:{' '}
-              <span>
-                {day}/{month}/{year}
-              </span>
+              Joined: <span>{moment(newDate).calendar()}</span>
             </p>
 
             <h4>{formatter.format(Number(balance).toFixed(2))}</h4>

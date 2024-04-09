@@ -59,6 +59,10 @@ const Landing = () => {
 
   return (
     <>
+      <div
+        style={{ textAlign: 'center', overflow: 'hidden' }}
+        id="google_translate_element"
+      ></div>
       {/* <Submenu /> */}
       <Hero />
       <Wrapper5>

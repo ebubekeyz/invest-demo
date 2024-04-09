@@ -11,6 +11,7 @@ import { IoIosFlash } from 'react-icons/io';
 import { MdHourglassEmpty } from 'react-icons/md';
 import { IoIosWallet } from 'react-icons/io';
 import { GiTwoCoins } from 'react-icons/gi';
+import moment from 'moment';
 
 const Dashboard = () => {
   // user id
@@ -38,12 +39,18 @@ const Dashboard = () => {
   // main balance
   const [mainBalance, setMainBalance] = useState({
     amount: '',
+    receipt: '',
     percent: '',
     days: '',
     plan: '',
     status: '',
-    updatedAt: '',
+    createdAt: '',
     coin: '',
+    userInvest: '',
+    payId: '',
+    amountId: '',
+    coinId: '',
+    investId: '',
   });
   const fetchMainBalance = async () => {
     try {
@@ -58,24 +65,41 @@ const Dashboard = () => {
       const length = bal.length - 1;
 
       const {
+        createdAt,
+        receipt,
         status,
+        _id: payId,
         amount: {
           amount: amt,
-          updatedAt,
+          _id: amountId,
           coin: {
             coinType: coin,
-            invest: { percent: percent, days: days, plan: plan },
+            user: userCoin,
+            _id: coinId,
+            invest: {
+              percent: percent,
+              days: days,
+              plan: plan,
+              _id: investId,
+              user: userInvest,
+            },
           },
         },
       } = bal[length];
       setMainBalance({
+        payId: payId,
+        receipt: receipt,
+        coinId: coinId,
+        investId: investId,
+        amountId: amountId,
         amount: amt,
         percent: percent,
         days: days,
         plan: plan,
         status: status,
         coin: coin,
-        updatedAt: updatedAt,
+        userInvest: userInvest,
+        createdAt: createdAt,
       });
     } catch (error) {
       console.log(error);
@@ -85,87 +109,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchMainBalance();
   }, [fetchMainBalance]);
-
-  const calculateTotalPercent = () => {
-    const total = (mainBalance.amount * filterBalancePercentageReduce) / 100;
-
-    return total;
-  };
-  useEffect(() => {
-    calculateTotalPercent();
-  }, []);
-
-  const [amount, setAmount] = useState({
-    id: '',
-    update: '',
-  });
-  const fetchAmountMain = async () => {
-    try {
-      const response = await mainFetch.get(
-        `/api/v1/amount/${userId}/showUserAmount`,
-        {
-          withCredentials: true,
-        }
-      );
-      const am = response.data.amount;
-      const len = am.length - 1;
-      const { amount, _id, updatedAt } = am[len];
-      setAmount({
-        id: _id,
-        update: updatedAt,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAmountMain();
-  }, [fetchAmountMain]);
-
-  const profit = () => {
-    const date = new Date();
-    const investDate = new Date(amount.update);
-
-    let getInvestDate = investDate.getDate();
-    let getDate = date.getDate();
-    let num = calculateTotalPercent();
-
-    // getInvestDate + mainBalance.days
-    if (getDate === getInvestDate + mainBalance.days) {
-      return num;
-    } else {
-      return (num = 0);
-    }
-    // if (getDate === getInvestDate + mainBalance.days + 1) {
-    //   return (num = 0);
-    // }
-
-    return num;
-  };
-  useEffect(() => {
-    profit();
-  }, [profit]);
-
-  //get the last balance, patch your balance into amount in payReceipt then use updatedAt to calculate your date
-  // create a button, give it condition if profit > 0 the button appears else dissapears
-
-  const postProfit = async () => {
-    try {
-      const response = await mainFetch.post(
-        '/api/v1/profit',
-        { amount: profit() },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    postProfit();
-  }, []);
-
-  // end main balance
 
   // Balance
 
@@ -227,6 +170,80 @@ const Dashboard = () => {
     },
     0
   );
+
+  const calculateTotalPercent = () => {
+    const total = (mainBalance.amount * filterBalancePercentageReduce) / 100;
+
+    return total;
+  };
+  useEffect(() => {
+    calculateTotalPercent();
+  }, []);
+
+  const [amount, setAmount] = useState({
+    id: '',
+    update: '',
+  });
+  const fetchAmountMain = async () => {
+    try {
+      const response = await mainFetch.get(
+        `/api/v1/amount/${userId}/showUserAmount`,
+        {
+          withCredentials: true,
+        }
+      );
+      const am = response.data.amount;
+      const len = am.length - 1;
+      const { amount, _id, updatedAt } = am[len];
+      setAmount({
+        id: _id,
+        update: updatedAt,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAmountMain();
+  }, [fetchAmountMain]);
+
+  // const newDate = new Date(mainBalance.createdAt);
+  // console.log(moment(newDate).format('DD HH:mm:ss'));
+  // console.log(moment(mainBalance.createdAt).format('DD HH:mm:ss'));
+
+  console.log(moment(amount.update).format('DD HH:mm'));
+  console.log(moment(mainBalance.createdAt).format('DD HH:mm'));
+
+  const profit = () => {
+    let num = calculateTotalPercent();
+
+    const check =
+      moment().format('DD HH:mm:ss') >=
+      moment(amount.update).add(mainBalance.days, 'days').format('DD HH:mm:ss');
+
+    return check === true && num;
+  };
+  useEffect(() => {
+    profit();
+  }, [profit]);
+
+  const postProfit = async () => {
+    try {
+      const response = await mainFetch.post(
+        '/api/v1/profit',
+        { amount: profit() },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    postProfit();
+  }, []);
+
+  // end main balance
 
   const formatter = new Intl.NumberFormat('en-DE', {
     style: 'currency',
@@ -475,9 +492,7 @@ const Dashboard = () => {
       });
       const { username } = response.data.user;
       setUsername(username);
-      setUserIdd(
-        `https://invest-demo-server.onrender.com/register/${username}`
-      );
+      setUserIdd(`https://trex-holding.com/register/${username}`);
     } catch (error) {
       console.log(error);
       console.log(error.response.data.msg);
@@ -560,16 +575,38 @@ const Dashboard = () => {
   //   }
   // };
 
+  // const oneMain = async () => {
+  //   setIsInvest('reinvesting balance...');
+  //   try {
+  //     const res = await mainFetch.post(
+  //       '/api/v1/payReceipt',
+  //       {
+  //         receipt: mainBalance.receipt,
+  //         amount: mainBalance.amountId,
+  //         status: mainBalance.status,
+  //         user: mainBalance.userInvest,
+  //       },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const one = async () => {
     setIsInvest('reinvesting balance...');
-    const res = await mainFetch.patch(
-      `/api/v1/amount/${amount.id}`,
-      { amount: mainAccountBalance },
-      { withCredentials: true }
-    );
-    if (res.status === 200) {
-      setIsInvest('Balance Reinvested');
-      toast.success('Balance Successfully Reinvested');
+    try {
+      const res = await mainFetch.patch(
+        `/api/v1/amount/${amount.id}`,
+        { amount: mainAccountBalance },
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        setIsInvest('Balance Reinvested');
+        toast.success('Balance Successfully Reinvested');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const two = async () => {
@@ -850,15 +887,15 @@ const Dashboard = () => {
                 width="100%"
                 height="536px"
                 scrolling="auto"
-                marginwidth="0"
-                marginheight="0"
-                frameborder="0"
+                marginWidth="0"
+                marginHeight="0"
+                frameBorder="0"
                 border="0"
                 className="iframe1"
               ></iframe>
             </div>
             <div className="iframe2">
-              <a href="https://coinlib.io" target="_blank" clasName="iframe3">
+              <a href="https://coinlib.io" target="_blank" className="iframe3">
                 Cryptocurrency Prices
               </a>
               &nbsp;by Coinlib

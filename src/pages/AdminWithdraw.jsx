@@ -25,6 +25,7 @@ const AdminWithdraw = () => {
   useEffect(() => {
     withdrawFunc();
   }, []);
+  console.log(withdraw);
 
   let idd = 0;
 
@@ -40,7 +41,7 @@ const AdminWithdraw = () => {
               <thead>
                 <tr>
                   <th>S/N</th>
-                  {/* <th>Username</th> */}
+                  <th>Username</th>
                   <th>WithdrawalMethod</th>
                   <th>WalletAddress</th>
                   <th>Amount</th>
@@ -58,9 +59,9 @@ const AdminWithdraw = () => {
                         amount,
                         walletAddress,
                         status,
-                        user,
+                        user: { username },
                       } = item;
-                      // console.log(user);
+                      console.log(username);
                       item.idd = idd++;
                       const update = `/editWithdraw?id=${withdrawId}`;
                       const del = `/deleteWithdraw?id=${withdrawId}`;
@@ -68,7 +69,7 @@ const AdminWithdraw = () => {
                       return (
                         <tr>
                           <td>{idd}</td>
-                          {/* <td>{user.username}</td> */}
+                          <td>{username}</td>
                           <td>{withdrawalMethod}</td>
                           <td>{walletAddress}</td>
                           <td>€{amount}</td>

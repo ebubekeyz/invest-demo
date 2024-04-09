@@ -42,7 +42,7 @@ const AdminDeposit = () => {
               <thead>
                 <tr>
                   <th>S/N</th>
-
+                  <th>Username</th>
                   <th>Coin</th>
                   <th>Plan</th>
                   <th>Amount</th>
@@ -61,7 +61,7 @@ const AdminDeposit = () => {
                         createdAt,
                         status,
                         receipt,
-
+                        user: { username },
                         amount: {
                           _id: amountId,
                           amount: amt,
@@ -75,7 +75,7 @@ const AdminDeposit = () => {
                           },
                         },
                       } = item;
-
+                      console.log(username);
                       item.idd = idd++;
                       const update = `/editDeposit?id=${id}`;
                       const del = `/deleteDeposit?id=${id}`;
@@ -88,7 +88,7 @@ const AdminDeposit = () => {
                       return (
                         <tr>
                           <td>{idd}</td>
-
+                          <td>{username}</td>
                           <td>{coin}</td>
                           <td>{plan}</td>
                           <td>€{amt}</td>
