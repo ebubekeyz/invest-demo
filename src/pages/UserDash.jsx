@@ -139,8 +139,7 @@ const UserDash = () => {
     return acc + curr.amount;
   }, 0);
 
-  const totalEarnings = reduceEarning + reduceProfit;
-
+  const totalEarnings = reduceEarning;
   // end earning
 
   const [balance, setBalance] = useState('');
@@ -178,12 +177,9 @@ const UserDash = () => {
   const [isLoad2, setIsLoad2] = useState('change password');
   const [isLoad3, setIsLoad3] = useState('update');
   const [isLoad4, setIsLoad4] = useState('update');
-  const [isLoad5, setIsLoad5] = useState('add referral bonus');
+  // const [isLoad5, setIsLoad5] = useState('add referral bonus');
   const [isLoad6, setIsLoad6] = useState('add penalty');
 
-  const [percentage, setPercentage] = useState({
-    amount: '',
-  });
   const [penalty, setPenalty] = useState({
     amount: '',
   });
@@ -196,13 +192,13 @@ const UserDash = () => {
   });
 
   const [update, setUpdate] = useState({
-    // fullName: '',
-    // username: '',
-    // email: '',
-    // phone: '',
-    // country: '',
-    // city: '',
-    // state: '',
+    fullName: '',
+    username: '',
+    email: '',
+    phone: '',
+    country: '',
+    city: '',
+    state: '',
     coins,
     walletAddress,
     status: 'verified',
@@ -211,6 +207,8 @@ const UserDash = () => {
     newPassword: '',
     password: '',
   });
+
+
   const handleSubmit1 = async (e) => {
     e.preventDefault();
 
@@ -220,15 +218,6 @@ const UserDash = () => {
         `/api/v1/users/${id}`,
         {
           fullName: update.fullName,
-          // username: update.username,
-          //   email: update.email,
-          phone: update.phone,
-          city: update.city,
-          state: update.state,
-          country: update.country,
-          coins: update.coins,
-          walletAddress: update.walletAddress,
-          status: update.status,
         },
         {
           withCredentials: true,
@@ -237,14 +226,231 @@ const UserDash = () => {
       toast.success('Update Successful');
       setUpdate({
         fullName: '',
-        // username: '',
-        // email: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitUsername = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          username: update.username,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        username: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitEmail = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          email: update.email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        email: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitPhone = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          phone: update.phone,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
         phone: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitCoins = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          coins: update.coins,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
         coins: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitWallet = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          walletAddress: update.walletAddress,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
         walletAddress: '',
-        country: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitStatus = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          status: update.status,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        status: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitCity = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          city: update.city,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
         city: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitState = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          state: update.state,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
         state: '',
+      });
+      setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitCountry = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoad1('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          country: update.country,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        country: '',
       });
       setIsLoad1('update complete');
     } catch (error) {
@@ -354,57 +560,6 @@ const UserDash = () => {
       toast.error(error.response.data.msg);
     }
   };
-
-  // percentage
-  const [percentageId, setPercentageId] = useState('');
-  const [percentageAmt, setPercentageAmt] = useState('');
-
-  const fetchPercentage = async () => {
-    try {
-      const response = await mainFetch.get(
-        `/api/v1/percentage/${id}/showUserPercentage`,
-        { withCredentials: true }
-      );
-      const percent = response.data.percentage;
-      const len = percent.length - 1;
-      const { _id, amount } = percent[len];
-      setPercentageId(_id);
-      setPercentageAmt(amount);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPercentage();
-  }, []);
-
-  const handleSubmit5 = async (e) => {
-    e.preventDefault();
-    try {
-      setIsLoad5('updating referral bonus...');
-      const response = await mainFetch.patch(
-        `/api/v1/percentage/${percentageId}`,
-        {
-          amount: percentage.amount,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      toast.success('Referral Bonus Added');
-      setPercentage({
-        amount: '',
-      });
-
-      setIsLoad5('Referral Bonus Added');
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.msg);
-    }
-  };
-  // end percentage
 
   // penalty
   const [penaltyId, setPenaltyId] = useState('');
@@ -632,22 +787,6 @@ const UserDash = () => {
   };
 
   const [isLoad10, setIsLoad10] = useState('Remove Bonus');
-  const removePercentage = async (e) => {
-    e.preventDefault();
-    try {
-      setIsLoad10('Bonus Removing...');
-      const response = await mainFetch.delete(
-        `/api/v1/percentage/${id}/deleteUserPercentage`,
-        { withCredentials: true }
-      );
-      setIsLoad10('Bonus Removed');
-      toast.success('Bonus Removed');
-    } catch (error) {
-      console.log(error);
-      setIsLoad10('Remove Bonus');
-      toast.error(error.response.data.msg);
-    }
-  };
 
   const [isLoad11, setIsLoad11] = useState('Remove Penalty');
   const removePenalty = async (e) => {
@@ -704,17 +843,6 @@ const UserDash = () => {
     }
   };
 
-  const four = async () => {
-    try {
-      const response = await mainFetch.delete(
-        `/api/v1/percentage/${id}/deleteUserPercentage`,
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const five = async () => {
     try {
       const response = await mainFetch.delete(
@@ -725,10 +853,20 @@ const UserDash = () => {
       console.log(error);
     }
   };
+  const six = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/profit/${id}/deleteUserProfit`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const deleteInvestFunc = (e) => {
     e.preventDefault();
-    Promise.all([one(), two(), three(), four(), five()]).then(() =>
+    Promise.all([one(), two(), three(), five(), six()]).then(() =>
       toast.success('Investment Account Deleted')
     );
   };
@@ -812,10 +950,50 @@ const UserDash = () => {
       console.log(error);
     }
   };
+
+
+    const one16 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/profit/${id}/deleteUserProfit`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const deleteUser = (e) => {
     e.preventDefault();
-    Promise.all([one10(), one11(), one12(), one13(), one14(), one15()]);
+    Promise.all([one10(), one11(), one12(), one13(), one14(), one15(), one16()]);
   };
+
+  const [users, setUsers] = useState([])
+
+  const showUserRef = async () => {
+    try {
+      const response = await mainFetch.get('/api/v1/users', {
+        withCredentials: true,
+      });
+      setUsers(response.data.users);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    showUserRef();
+  }, [showUserRef]);
+
+
+  const filterUser = users.filter((item) => item.referralId === `${username}`);
+
+  // end referral
+
+  const reduceFilterUserBalance = filterUser.reduce((acc, curr) => {
+    return acc + curr.balance;
+  }, 0);
+
+  const percentageReduce = (reduceFilterUserBalance * 10) / 100;
 
   return (
     <Wrapper>
@@ -900,18 +1078,6 @@ const UserDash = () => {
                 )}
               </span>
             </p>
-            <p>
-              Referral Names:{' '}
-              <span>
-                {filterUsers
-                  ? filterUsers.map((item) => {
-                      const { _id, username } = item;
-
-                      return <span>{username}</span>;
-                    })
-                  : 'N/A'}
-              </span>
-            </p>
 
             <p>
               Joined: <span>{moment(newDate).calendar()}</span>
@@ -940,7 +1106,23 @@ const UserDash = () => {
                   ? formatter.format(Number(totalEarnings).toFixed(2))
                   : formatter.format(Number(0).toFixed(2))}
               </h4>
-              <p>EARNED TOTAL</p>
+              <p>ADDED BALANCE</p>
+            </div>
+          </div>
+
+          <div className="balance" id="main">
+            <IoPower className="power" />
+            <div className="amount">
+              <h4>{formatter.format(Number(reduceProfit).toFixed(2))}</h4>
+              <p>TOTAL PROFIT</p>
+            </div>
+          </div>
+
+          <div className="balance" id="main">
+            <IoPower className="power" />
+            <div className="amount">
+              <h4>{formatter.format(Number(percentageReduce).toFixed(2))}</h4>
+              <p>TOTAL REFERRAL BONUS</p>
             </div>
           </div>
 
@@ -993,7 +1175,7 @@ const UserDash = () => {
           </div>
 
           <form onSubmit={handleSubmit1} className="updateForm">
-            <h4>Update User</h4>
+            <h4>Update FullName</h4>
             <div className="inner">
               <label htmlFor="fullName" className="label">
                 FullName
@@ -1009,8 +1191,14 @@ const UserDash = () => {
                 }}
               />
             </div>
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
 
-            {/* <div className="inner">
+          <form onSubmit={handleSubmitUsername} className="updateForm">
+            <h4>Update Username</h4>
+            <div className="inner">
               <label htmlFor="username" className="label">
                 Username
               </label>
@@ -1024,8 +1212,36 @@ const UserDash = () => {
                   setUpdate({ ...update, [e.target.name]: e.target.value });
                 }}
               />
-            </div> */}
+            </div>
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
 
+          <form onSubmit={handleSubmitEmail} className="updateForm">
+            <h4>Update Email</h4>
+            <div className="inner">
+              <label htmlFor="email" className="label">
+                Email
+              </label>
+              <input
+                type="text"
+                className="input"
+                placeholder={email}
+                name="email"
+                value={update.email}
+                onChange={(e) => {
+                  setUpdate({ ...update, [e.target.name]: e.target.value });
+                }}
+              />
+            </div>
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
+
+          <form onSubmit={handleSubmitPhone} className="updateForm">
+            <h4>Update Phone</h4>
             <div className="inner">
               <label htmlFor="phone" className="label">
                 Phone
@@ -1042,6 +1258,13 @@ const UserDash = () => {
               />
             </div>
 
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
+
+          <form onSubmit={handleSubmitCountry} className="updateForm">
+            <h4>Update Country</h4>
             <div className="inner">
               <label htmlFor="country" className="label">
                 Country
@@ -1058,6 +1281,13 @@ const UserDash = () => {
               />
             </div>
 
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
+
+          <form onSubmit={handleSubmitCity} className="updateForm">
+            <h4>Update City</h4>
             <div className="inner">
               <label htmlFor="city" className="label">
                 City
@@ -1073,7 +1303,13 @@ const UserDash = () => {
                 }}
               />
             </div>
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
 
+          <form onSubmit={handleSubmitState} className="updateForm">
+            <h4>Update State</h4>
             <div className="inner">
               <label htmlFor="state" className="label">
                 State
@@ -1090,24 +1326,15 @@ const UserDash = () => {
               />
             </div>
 
-            <div className="inner">
-              <label htmlFor="state" className="label">
-                Coins
-              </label>
-              <input
-                type="text"
-                className="input"
-                name="coins"
-                placeholder={coins}
-                value={update.coins}
-                onChange={(e) => {
-                  setUpdate({ ...update, [e.target.name]: e.target.value });
-                }}
-              />
-            </div>
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
 
+          <form onSubmit={handleSubmitWallet} className="updateForm">
+            <h4>Update Wallet Address</h4>
             <div className="inner">
-              <label htmlFor="state" className="label">
+              <label htmlFor="walletAddress" className="label">
                 Wallet Address
               </label>
               <input
@@ -1122,6 +1349,36 @@ const UserDash = () => {
               />
             </div>
 
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
+
+          <form onSubmit={handleSubmitCoins} className="updateForm">
+            <h4>Update Coin</h4>
+            <div className="inner">
+              <label htmlFor="coin" className="label">
+                Coins
+              </label>
+              <input
+                type="text"
+                className="input"
+                name="coins"
+                placeholder={coins}
+                value={update.coins}
+                onChange={(e) => {
+                  setUpdate({ ...update, [e.target.name]: e.target.value });
+                }}
+              />
+            </div>
+
+            <button type="submit" className="btn">
+              {isLoad1}
+            </button>
+          </form>
+
+          <form onSubmit={handleSubmitStatus} className="updateForm">
+            <h4>Update Status</h4>
             <div className="inner">
               <label htmlFor="status" className="label">
                 Status
@@ -1234,43 +1491,6 @@ const UserDash = () => {
           <div style={{ textAlign: 'center' }}>
             <button onClick={removeEarning} type="button" className="btn">
               {isLoad9}
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit5} className="change updateForm">
-            <h4>Add Referral Bonus</h4>
-            <div className="inner">
-              <label htmlFor="amount" className="label">
-                Amount
-              </label>
-              <input
-                type="text"
-                className="input"
-                name="amount"
-                placeholder={percentageAmt}
-                value={percentage.amount}
-                onChange={(e) => {
-                  setPercentage({
-                    ...percentage,
-                    [e.target.name]: e.target.value,
-                  });
-                }}
-              />
-            </div>
-
-            <button type="submit" className="btn">
-              {isLoad5}
-            </button>
-          </form>
-
-          <div style={{ textAlign: 'center' }}>
-            <button
-              style={{ textAlign: 'center' }}
-              onClick={removePercentage}
-              type="button"
-              className="btn"
-            >
-              {isLoad10}
             </button>
           </div>
 

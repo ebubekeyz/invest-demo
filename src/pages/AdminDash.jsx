@@ -100,48 +100,66 @@ const AdminDash = () => {
     currency: 'EUR',
   });
 
-  const [profit, setProfit] = useState([]);
-  const getProfit = async () => {
+  // const [profit, setProfit] = useState([]);
+  // const getProfit = async () => {
+  //   try {
+  //     const response = await mainFetch('api/v1/profit', {
+  //       withCredentials: true,
+  //     });
+  //     setProfit(response.data.profit);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getProfit();
+  // }, []);
+
+  // const reduceProfit = profit.reduce((acc, curr) => {
+  //   return acc + curr.amount;
+  // }, 0);
+
+  // const [earning, setEarning] = useState([]);
+  // const getEarning = async () => {
+  //   try {
+  //     const response = await mainFetch('api/v1/earning', {
+  //       withCredentials: true,
+  //     });
+  //     setEarning(response.data.earning);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getEarning();
+  // }, []);
+  const [user, setUser] = useState([]);
+
+  const showUserRef = async () => {
     try {
-      const response = await mainFetch('api/v1/profit', {
+      const response = await mainFetch.get('/api/v1/users', {
         withCredentials: true,
       });
-      setProfit(response.data.profit);
+
+      setUser(response.data.users);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getProfit();
-  }, []);
+    showUserRef();
+  }, [showUserRef]);
 
-  const reduceProfit = profit.reduce((acc, curr) => {
-    return acc + curr.amount;
+  const reduceFilterUserBalance = user.reduce((acc, curr) => {
+    return acc + curr.balance;
   }, 0);
 
-  const [earning, setEarning] = useState([]);
-  const getEarning = async () => {
-    try {
-      const response = await mainFetch('api/v1/earning', {
-        withCredentials: true,
-      });
-      setEarning(response.data.earning);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //admin
 
-  useEffect(() => {
-    getEarning();
-  }, []);
-
-  //admin 
-  const reduceEarning = earning.reduce((acc, curr) => {
-    return acc + curr.amount;
-  }, 0);
-
-  const totalEarning = reduceEarning + reduceProfit;
+  const totalEarning = reduceFilterUserBalance;
 
   const [balance, setBalance] = useState([]);
 
@@ -193,7 +211,7 @@ const AdminDash = () => {
             </p>
           </div>
 
-          <div className="members">
+          {/* <div className="members">
             <h5>Investment Packages</h5>
             <p>
               Active: <span>{dupFilterPay.length}</span>
@@ -201,7 +219,7 @@ const AdminDash = () => {
             <p>
               Inactive: <span>{dupFilterPay2.length}</span>
             </p>
-          </div>
+          </div> */}
 
           <div className="members" id="total">
             <h5>Total System Earnings:</h5>

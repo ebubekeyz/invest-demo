@@ -10,7 +10,70 @@ import Sidebar from '../components/Sidebar';
 import Navbar2 from '../components/Navbar2';
 
 const Settings = () => {
+  const [id, setId] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [phone, setPhone] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [coins, setCoins] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
   const [isLoad1, setIsLoad1] = useState('update');
+  const [isLoadUsername, setIsLoadUsername] = useState('update');
+  const [isLoadCity, setIsLoadCity] = useState('update');
+  const [isLoadState, setIsLoadState] = useState('update');
+  const [isLoadPhone, setIsLoadPhone] = useState('update');
+  const [isLoadAddress, setIsLoadAddress] = useState('update');
+  const [isLoadCountry, setIsLoadCountry] = useState('update');
+  const [isLoadEmail, setIsLoadEmail] = useState('update');
+
+  const backHandler = () => {
+    window.history.back();
+  };
+
+  const showFunc = async () => {
+    try {
+      const response = await mainFetch.get(`/api/v1/users/showMe`, {
+        withCredentials: true,
+      });
+
+      setId(response.data.user.userId);
+      setFullName(response.data.user.fullName);
+      setEmail(response.data.user.email);
+      setCity(response.data.user.city);
+      setState(response.data.user.state);
+      setCountry(response.data.user.country);
+      setPhone(response.data.user.phone);
+
+      setUsername(response.data.user.fullName);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    showFunc();
+  }, []);
+
+  const userFunc = async () => {
+    try {
+      const response = await mainFetch.get(`/api/v1/users/${id}`, {
+        withCredentials: true,
+      });
+
+      setCoins(response.data.user.coins);
+      setWalletAddress(response.data.user.walletAddress);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    userFunc();
+  }, [userFunc]);
+
   const [update, setUpdate] = useState({
     fullName: '',
     username: '',
@@ -19,86 +82,24 @@ const Settings = () => {
     country: '',
     city: '',
     state: '',
-    coins: '',
-    walletAddress: '',
+    coins,
+    walletAddress,
+    status: 'verified',
+  });
+  const [pass, setPass] = useState({
+    newPassword: '',
+    password: '',
   });
 
-  const backHandler = () => {
-    window.history.back();
-  };
-
-  const [userId, setUserId] = useState('');
-
-  const showId = async () => {
-    try {
-      const response = await mainFetch.get('/api/v1/users/showMe', {
-        withCredentials: true,
-      });
-
-      console.log(response.data.user);
-      setUserId(response.data.user.userId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    showId();
-  }, [showId]);
-
-  const [info, setInfo] = useState({
-    fullName: '',
-    city: '',
-    state: '',
-    walletAddress: '',
-    coins: '',
-    country: '',
-    phone: '',
-  });
-
-  console.log(userId);
-
-  const infoFetch = async () => {
-    try {
-      const response = await mainFetch.get(`/api/v1/users/${userId}`, {
-        withCredentials: true,
-      });
-
-      setInfo({
-        fullName: response.data.user.fullName,
-        city: response.data.user.city,
-        state: response.data.user.state,
-        walletAddress: response.data.user.walletAddress,
-        coins: response.data.user.coins,
-        country: response.data.user.country,
-        phone: response.data.user.phone,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    infoFetch();
-  }, [infoFetch]);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit1 = async (e) => {
     e.preventDefault();
 
     try {
       setIsLoad1('updating...');
       const response = await mainFetch.patch(
-        `/api/v1/users/${userId}`,
+        `/api/v1/users/${id}`,
         {
           fullName: update.fullName,
-          // username: update.username,
-          //   email: update.email,
-          phone: update.phone,
-          city: update.city,
-          state: update.state,
-          country: update.country,
-          coins: update.coins,
-          walletAddress: update.walletAddress,
-          status: update.status,
         },
         {
           withCredentials: true,
@@ -107,16 +108,210 @@ const Settings = () => {
       toast.success('Update Successful');
       setUpdate({
         fullName: '',
-        // username: '',
-        // email: '',
-        phone: '',
-        coins: '',
-        walletAddress: '',
-        country: '',
-        city: '',
-        state: '',
       });
       setIsLoad1('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitUsername = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadUsername('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          username: update.username,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        username: '',
+      });
+      setIsLoadUsername('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitEmail = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadEmail('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          email: update.email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        email: '',
+      });
+      setIsLoadEmail('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitPhone = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadPhone('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          phone: update.phone,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        phone: '',
+      });
+      setIsLoadPhone('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  // const handleSubmitCoins = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     setIsLoad1('updating...');
+  //     const response = await mainFetch.patch(
+  //       `/api/v1/users/${id}`,
+  //       {
+  //         coins: update.coins,
+  //       },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     toast.success('Update Successful');
+  //     setUpdate({
+  //       coins: '',
+  //     });
+  //     setIsLoad1('update complete');
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.response.data.msg);
+  //   }
+  // };
+
+  const handleSubmitWalletCoins = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadAddress('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          coins: update.coins,
+          walletAddress: update.walletAddress,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        walletAddress: '',
+      });
+      setIsLoadAddress('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  
+  const handleSubmitCity = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadCity('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          city: update.city,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        city: '',
+      });
+      setIsLoadCity('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitState = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadState('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          state: update.state,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        state: '',
+      });
+      setIsLoadState('update complete');
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.msg);
+    }
+  };
+
+  const handleSubmitCountry = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoadCountry('updating...');
+      const response = await mainFetch.patch(
+        `/api/v1/users/${id}`,
+        {
+          country: update.country,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Update Successful');
+      setUpdate({
+        country: '',
+      });
+      setIsLoadCountry('update complete');
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.msg);
@@ -153,9 +348,9 @@ const Settings = () => {
               </Link>
             </article>
 
-            <article>
-              <form onSubmit={handleSubmit} className="updateForm">
-                <h4>Update User</h4>
+            <article className="adjust">
+              <form onSubmit={handleSubmit1} className="updateForm">
+                <h4>Update FullName</h4>
                 <div className="inner">
                   <label htmlFor="fullName" className="label">
                     FullName
@@ -163,15 +358,65 @@ const Settings = () => {
                   <input
                     type="text"
                     className="input"
-                    placeholder={info.fullName}
                     name="fullName"
+                    placeholder={fullName}
                     value={update.name}
                     onChange={(e) => {
                       setUpdate({ ...update, [e.target.name]: e.target.value });
                     }}
                   />
                 </div>
+                <button type="submit" className="btn">
+                  {isLoad1}
+                </button>
+              </form>
 
+              <form onSubmit={handleSubmitUsername} className="updateForm">
+                <h4>Update Username</h4>
+                <div className="inner">
+                  <label htmlFor="username" className="label">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder={username}
+                    name="username"
+                    value={update.username}
+                    onChange={(e) => {
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
+                    }}
+                  />
+                </div>
+                <button type="submit" className="btn">
+                  {isLoadUsername}
+                </button>
+              </form>
+
+              <form onSubmit={handleSubmitEmail} className="updateForm">
+                <h4>Update Email</h4>
+                <div className="inner">
+                  <label htmlFor="email" className="label">
+                    Email
+                  </label>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder={email}
+                    name="email"
+                    value={update.email}
+                    onChange={(e) => {
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
+                    }}
+                  />
+                </div>
+                <button type="submit" className="btn">
+                  {isLoadEmail}
+                </button>
+              </form>
+
+              <form onSubmit={handleSubmitPhone} className="updateForm">
+                <h4>Update Phone</h4>
                 <div className="inner">
                   <label htmlFor="phone" className="label">
                     Phone
@@ -179,8 +424,8 @@ const Settings = () => {
                   <input
                     type="text"
                     className="input"
-                    placeholder={info.phone}
                     name="phone"
+                    placeholder={phone}
                     value={update.phone}
                     onChange={(e) => {
                       setUpdate({ ...update, [e.target.name]: e.target.value });
@@ -188,6 +433,13 @@ const Settings = () => {
                   />
                 </div>
 
+                <button type="submit" className="btn">
+                  {isLoadPhone}
+                </button>
+              </form>
+
+              <form onSubmit={handleSubmitCountry} className="updateForm">
+                <h4>Update Country</h4>
                 <div className="inner">
                   <label htmlFor="country" className="label">
                     Country
@@ -195,7 +447,7 @@ const Settings = () => {
                   <input
                     type="text"
                     className="input"
-                    placeholder={info.country}
+                    placeholder={country}
                     name="country"
                     value={update.country}
                     onChange={(e) => {
@@ -204,6 +456,13 @@ const Settings = () => {
                   />
                 </div>
 
+                <button type="submit" className="btn">
+                  {isLoadCountry}
+                </button>
+              </form>
+
+              <form onSubmit={handleSubmitCity} className="updateForm">
+                <h4>Update City</h4>
                 <div className="inner">
                   <label htmlFor="city" className="label">
                     City
@@ -211,7 +470,7 @@ const Settings = () => {
                   <input
                     type="text"
                     className="input"
-                    placeholder={info.city}
+                    placeholder={city}
                     name="city"
                     value={update.city}
                     onChange={(e) => {
@@ -219,7 +478,13 @@ const Settings = () => {
                     }}
                   />
                 </div>
+                <button type="submit" className="btn">
+                  {isLoadCity}
+                </button>
+              </form>
 
+              <form onSubmit={handleSubmitState} className="updateForm">
+                <h4>Update State</h4>
                 <div className="inner">
                   <label htmlFor="state" className="label">
                     State
@@ -227,8 +492,8 @@ const Settings = () => {
                   <input
                     type="text"
                     className="input"
-                    placeholder={info.state}
                     name="state"
+                    placeholder={state}
                     value={update.state}
                     onChange={(e) => {
                       setUpdate({ ...update, [e.target.name]: e.target.value });
@@ -236,31 +501,22 @@ const Settings = () => {
                   />
                 </div>
 
-                <div className="inner">
-                  <label htmlFor="state" className="label">
-                    Coins
-                  </label>
-                  <input
-                    type="text"
-                    className="input"
-                    placeholder={info.coins}
-                    name="coins"
-                    value={update.coins}
-                    onChange={(e) => {
-                      setUpdate({ ...update, [e.target.name]: e.target.value });
-                    }}
-                  />
-                </div>
+                <button type="submit" className="btn">
+                  {isLoadState}
+                </button>
+              </form>
 
+              <form onSubmit={handleSubmitWalletCoins} className="updateForm">
+                <h4>Update Wallet Address</h4>
                 <div className="inner">
-                  <label htmlFor="state" className="label">
+                  <label htmlFor="walletAddress" className="label">
                     Wallet Address
                   </label>
                   <input
                     type="text"
                     className="input"
                     name="walletAddress"
-                    placeholder={info.walletAddress}
+                    placeholder={walletAddress}
                     value={update.walletAddress}
                     onChange={(e) => {
                       setUpdate({ ...update, [e.target.name]: e.target.value });
@@ -268,8 +524,24 @@ const Settings = () => {
                   />
                 </div>
 
+                <div className="inner">
+                  <label htmlFor="coin" className="label">
+                    Coins
+                  </label>
+                  <input
+                    type="text"
+                    className="input"
+                    name="coins"
+                    placeholder={coins}
+                    value={update.coins}
+                    onChange={(e) => {
+                      setUpdate({ ...update, [e.target.name]: e.target.value });
+                    }}
+                  />
+                </div>
+
                 <button type="submit" className="btn">
-                  {isLoad1}
+                  {isLoadAddress}
                 </button>
               </form>
             </article>

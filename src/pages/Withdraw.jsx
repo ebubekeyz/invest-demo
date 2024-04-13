@@ -11,6 +11,8 @@ import Sidebar from '../components/Sidebar';
 
 const Withdraw = () => {
   const [userId, setUserId] = useState('');
+  let [coins, setCoins] = useState('');
+  let [walletAddress, setWalletAddress] = useState('');
 
   const fetchUserId = async () => {
     try {
@@ -28,6 +30,26 @@ const Withdraw = () => {
   useEffect(() => {
     fetchUserId();
   }, [fetchUserId]);
+
+  const userFunc = async () => {
+    try {
+      const response = await mainFetch.get(`/api/v1/users/${userId}`, {
+        withCredentials: true,
+      });
+
+      setCoins(response.data.user.coins);
+      setWalletAddress(response.data.user.walletAddress);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    userFunc();
+  }, [userFunc]);
+
+  coins = coins ? coins : 'N/A';
+  walletAddress = walletAddress ? walletAddress : 'N/A';
 
   const [isLoading, setIsLoading] = useState('withdraw');
 
@@ -130,11 +152,10 @@ const Withdraw = () => {
   }, [fetchBalance]);
 
   const bal = JSON.parse(localStorage.getItem('accBalance'));
-  console.log(balance);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let { withdrawalMethod, amount, currentBalance, walletAddress, status } =
+    let { withdrawalMethod, amount, currentBalance, walletAdd, status } =
       withdraw;
 
     if (amount > balance) {
@@ -148,7 +169,7 @@ const Withdraw = () => {
       const res = await mainFetch.post(
         '/api/v1/withdraw',
         {
-          withdrawalMethod: withdrawalMethod,
+          withdrawalMethod: coins,
           amount: amount,
           currentBalance: currentBalance,
           walletAddress: walletAddress,
@@ -203,7 +224,7 @@ const Withdraw = () => {
       const response = await mainFetch.get(`/api/v1/users/${user}`, {
         withCredentials: true,
       });
-      console.log(response.data.user);
+
       // setUser2(response.data.user.city);
     } catch (error) {
       console.log(error);
@@ -226,12 +247,15 @@ const Withdraw = () => {
           <article>
             <form className="withdrawForm" onSubmit={handleSubmit}>
               <div className="withdrawForm-inner">
-                {/* <h4>
-                Current balance{' '}
-                {formatter.format(Number(mainBalance).toFixed(2))}
-              </h4> */}
-                <h4>Withdraw Method</h4>
-                <select
+                <h4>
+                  Current balance {formatter.format(Number(balance).toFixed(2))}
+                </h4>
+                <h6 style={{ marginTop: '2rem', color: 'yellow' }}>
+                  Please fill your Wallet address details from your settings
+                  before making withdrawal
+                </h6>
+                <h4>Coins</h4>
+                {/* <select
                   className="form-input"
                   id="select"
                   name="withdrawalMethod"
@@ -250,7 +274,20 @@ const Withdraw = () => {
                   <option value="TRON">TRON</option>
                   <option value="BNB">BNB</option>
                   <option value="USDT">USDT</option>
-                </select>
+                </select> */}
+                <input
+                  readOnly
+                  type="text"
+                  name="withdrawalMethod"
+                  className="form-input input"
+                  value={coins}
+                  onChange={(e) => {
+                    setWithdraw({
+                      ...withdraw,
+                      [e.target.name]: e.target.value,
+                    });
+                  }}
+                />
 
                 <div className="bank">
                   <h5>Withdraw Amount</h5>
@@ -277,10 +314,11 @@ const Withdraw = () => {
 
                   <h5 className="wall">Wallet Address</h5>
                   <input
+                    readOnly
                     type="text"
                     name="walletAddress"
                     className="form-input input"
-                    value={withdraw.walletAddress}
+                    value={walletAddress}
                     onChange={(e) => {
                       setWithdraw({
                         ...withdraw,

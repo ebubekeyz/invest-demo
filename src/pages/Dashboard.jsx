@@ -221,8 +221,7 @@ const Dashboard = () => {
   // console.log(moment(newDate).format('DD HH:mm:ss'));
   // console.log(moment(mainBalance.createdAt).format('DD HH:mm:ss'));
 
-  console.log(moment(amount.update).format('DD HH:mm'));
-  console.log(moment(mainBalance.createdAt).format('DD HH:mm'));
+ 
 
   let profit = () => {
     let num = calculateTotalPercent();
@@ -362,22 +361,6 @@ const Dashboard = () => {
     postEarning();
   }, []);
 
-  const postPercentage = async () => {
-    try {
-      const response = await mainFetch.post(
-        '/api/v1/percentage',
-        { amount: 0 },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    postPercentage();
-  }, []);
-
   const postPenalty = async () => {
     try {
       const response = await mainFetch.post(
@@ -395,34 +378,6 @@ const Dashboard = () => {
   }, []);
 
   // end penalty
-
-  // get percentage
-
-  const [percentage, setPercentage] = useState([]);
-  const fetchPercentage = async () => {
-    try {
-      const response = await mainFetch.get(
-        '/api/v1/percentage/showUserPercentage',
-        {
-          withCredentials: true,
-        }
-      );
-
-      setPercentage(response.data.percentage);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPercentage();
-  }, [fetchPercentage]);
-
-  const percentageReduce = percentage.reduce((acc, curr) => {
-    return acc + curr.amount;
-  }, 0);
-
-  // end percentage
 
   // curr withdraw
   const [currWithdraw, setCurrWithdraw] = useState([]);
@@ -488,14 +443,13 @@ const Dashboard = () => {
 
   //endTotal withdraw
 
-  // let mainAccountBalance =
-  //   // mainBalance.amount +
-  //   filterBalancePaidReduce +
-  //   earningReduce +
-  //   profit() -
-  //   percentageReduce -
-  //   penaltyReduce -
-  //   currWithdraw;
+  const userAccount =
+    // mainBalance.amount +
+    filterBalancePaidReduce +
+    earningReduce +
+    profit() -
+    penaltyReduce -
+    totalWithdraw;
 
   let mainAccountBalance;
 
@@ -506,34 +460,10 @@ const Dashboard = () => {
       filterBalancePaidReduce +
       earningReduce +
       profit() -
-      percentageReduce -
       penaltyReduce -
       totalWithdraw;
   }
 
-  // console.log(mainAccountBalance);
-
-  const [balance, setBalance] = useState('');
-  const postBalance = async () => {
-    try {
-      const response = await mainFetch.patch(
-        `/api/v1/payReceipt/${mainBalance.payId}`,
-        { balance: mainAccountBalance },
-        { withCredentials: true }
-      );
-
-      console.log(response.data.payReceipt);
-
-      setBalance(response.data.payReceipt.balance);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    postBalance();
-  }, [postBalance]);
-  console.log(balance);
-  // referral copy
   const [userIdd, setUserIdd] = useState('');
   const [username, setUsername] = useState('');
   const fetchUser = async () => {
@@ -554,10 +484,22 @@ const Dashboard = () => {
     fetchUser();
   }, []);
 
-  const copyReferral = () => {
-    copy(userIdd);
-    toast.success(`You have copied ${userIdd}`);
+  const postUserBalance = async () => {
+    try {
+      const response = await mainFetch.patch(
+        `/api/v1/users/${userId}`,
+        { balance: userAccount },
+        { withCredentials: true }
+      );
+
+    
+    } catch (error) {
+      console.log(error);
+    }
   };
+  useEffect(() => {
+    postUserBalance();
+  }, [postUserBalance]);
 
   const [user, setUser] = useState([]);
 
@@ -580,6 +522,56 @@ const Dashboard = () => {
   const filterUser = user.filter((item) => item.referralId === `${username}`);
 
   // end referral
+
+  const reduceFilterUserBalance = filterUser.reduce((acc, curr) => {
+    return acc + curr.balance;
+  }, 0);
+
+  const percentageReduce = (reduceFilterUserBalance * 10) / 100;
+
+  const [balance, setBalance] = useState('');
+  const postBalance = async () => {
+    const main = mainAccountBalance + percentageReduce;
+    try {
+      const response = await mainFetch.patch(
+        `/api/v1/payReceipt/${mainBalance.payId}`,
+        { balance: main },
+        { withCredentials: true }
+      );
+
+      setBalance(response.data.payReceipt.balance);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    postBalance();
+  }, [postBalance]);
+
+  // referral copy
+
+  const copyReferral = () => {
+    copy(userIdd);
+    toast.success(`You have copied ${userIdd}`);
+  };
+
+  // const postBalance2 = async () => {
+  //   try {
+  //     const main = mainAccountBalance + percentageReduce;
+  //     const response = await mainFetch.patch(
+  //       `/api/v1/payReceipt/${mainBalance.payId}`,
+  //       { balance: main },
+  //       { withCredentials: true }
+  //     );
+
+  //     setBalance(response.data.payReceipt.balance);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   postBalance2();
+  // }, [postBalance2]);
 
   const [isInvest, setIsInvest] = useState('reinvest');
 
@@ -645,17 +637,6 @@ const Dashboard = () => {
     }
   };
 
-  const five = async () => {
-    try {
-      const response = await mainFetch.delete(
-        `/api/v1/percentage/${userId}/deleteUserPercentage`,
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // const six = async () => {
   //   try {
   //     const response = await mainFetch.delete(
@@ -668,7 +649,7 @@ const Dashboard = () => {
   // };
   const reinvestFunc = (e) => {
     e.preventDefault();
-    Promise.all([one(), one111(), two(), three(), four(), five()]);
+    Promise.all([one(), one111(), two(), three(), four()]);
   };
 
   const one1 = async () => {
@@ -705,17 +686,6 @@ const Dashboard = () => {
     }
   };
 
-  const four1 = async () => {
-    try {
-      const response = await mainFetch.delete(
-        `/api/v1/percentage/${userId}/deleteUserPercentage`,
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const five1 = async () => {
     try {
       const response = await mainFetch.delete(
@@ -741,7 +711,7 @@ const Dashboard = () => {
   const nav = useNavigate();
   const upgrade = (e) => {
     e.preventDefault();
-    Promise.all([one1(), two1(), three1(), four1(), five1()]).then(() =>
+    Promise.all([one1(), two1(), three1(), five1()]).then(() =>
       nav('/investDash')
     );
   };

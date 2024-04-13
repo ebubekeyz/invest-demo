@@ -47,10 +47,10 @@ const Members = () => {
       <div className="container">
         <Sidebar2 />
         <section className="admin">
-          <div class="search__container" id="search">
-            <p class="search__title">Search Users</p>
+          <div className="search__container" id="search">
+            <p className="search__title">Search Users</p>
             <input
-              class="search__input"
+              className="search__input"
               type="text"
               name="search"
               value={search}
@@ -61,7 +61,7 @@ const Members = () => {
           </div>
 
           <div className="table-wrapper">
-            <table class="fl-table">
+            <table className="fl-table">
               <thead>
                 <tr>
                   <th>S/N</th>

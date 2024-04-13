@@ -41,6 +41,9 @@ const Wrapper = styled.section`
     letter-spacing: 0;
     font-weight: bold;
   }
+  .adjust {
+    margin-bottom: 8rem;
+  }
   .inner {
     display: grid;
     grid-template-columns: 30% 70%;
