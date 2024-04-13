@@ -149,14 +149,14 @@ const UserDash = () => {
   const fetchBalance = async () => {
     try {
       const response = await mainFetch.get(
-        `/api/v1/balance/${id}/showUserBalance`,
+        `/api/v1/payReceipt/${id}/showUserPayReceipt`,
         {
           withCredentials: true,
         }
       );
-      const bal = response.data.balance;
-      const len = bal.length - 1;
-      const { balance } = bal[len];
+      const pay = response.data.payReceipt;
+      const len = pay.length - 1;
+      const { balance } = pay[len];
       setBalance(balance);
       // setBalanceId(id);
     } catch (error) {
@@ -734,8 +734,7 @@ const UserDash = () => {
   };
 
   const [isLoad16, setIsLoad16] = useState('Delete User');
-  const deleteUser = async (e) => {
-    e.preventDefault();
+  const one10 = async () => {
     setIsLoad16('Deleting User...');
     try {
       const response = await mainFetch.delete(`/api/v1/users/${id}`, {
@@ -747,6 +746,75 @@ const UserDash = () => {
       console.log(error);
       setIsLoad16('Delete User');
     }
+  };
+
+  const one11 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/payReceipt/${id}/deleteUserPayReceipt`,
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const one12 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/withdraw/${id}/deleteUserWithdraw`,
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const one13 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/amount/${id}/deleteUserAmount`,
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const one14 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/coin/${id}/deleteUserCoin`,
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const one15 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/invest/${id}/deleteUserInvest`,
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteUser = (e) => {
+    e.preventDefault();
+    Promise.all([one10(), one11(), one12(), one13(), one14(), one15()]);
   };
 
   return (

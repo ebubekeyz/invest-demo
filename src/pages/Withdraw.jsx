@@ -9,15 +9,26 @@ import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import Sidebar from '../components/Sidebar';
 
-// export const loader = async () => {
-//   const response = await mainFetch.get(`api/v1/withdraw/showUserWithdraw`, {
-//     withCredentials: true,
-//   });
-
-//   return { withdrawal: response.data.withdraw };
-// };
-
 const Withdraw = () => {
+  const [userId, setUserId] = useState('');
+
+  const fetchUserId = async () => {
+    try {
+      const response = await mainFetch.get('/api/v1/users/showMe', {
+        withCredentials: true,
+      });
+      const { userId } = response.data.user;
+
+      setUserId(userId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserId();
+  }, [fetchUserId]);
+
   const [isLoading, setIsLoading] = useState('withdraw');
 
   const [withdraw, setWithdraw] = useState({
@@ -93,38 +104,43 @@ const Withdraw = () => {
     return acc + curr.amount;
   }, 0);
 
-  const [mainBalance, setMainBalance] = useState('');
-  const [accountBalance, setAccountBalance] = useState('');
-  const showBalance = async () => {
+  const [balance, setBalance] = useState('');
+  // const [balanceId, setBalanceId] = useState('');
+
+  const fetchBalance = async () => {
     try {
-      const res = await mainFetch.get('/api/v1/balance', {
-        withCredentials: true,
-      });
-
-      const bal = res.data.balance;
-
-      const num = bal.length - 1;
-      const { balance } = bal[num];
-      setMainBalance(balance - withdrawAmt);
-      setAccountBalance(balance);
+      const response = await mainFetch.get(
+        `/api/v1/payReceipt/${userId}/showUserPayReceipt`,
+        {
+          withCredentials: true,
+        }
+      );
+      const pay = response.data.payReceipt;
+      const len = pay.length - 1;
+      const { balance } = pay[len];
+      setBalance(balance);
+      // setBalanceId(id);
     } catch (error) {
       console.log(error);
-      console.log(error.res.data.msg);
     }
   };
 
   useEffect(() => {
-    showBalance();
-  }, [showBalance]);
+    fetchBalance();
+  }, [fetchBalance]);
+
+  const bal = JSON.parse(localStorage.getItem('accBalance'));
+  console.log(balance);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let { withdrawalMethod, amount, currentBalance, walletAddress, status } =
       withdraw;
-    // if (amount > accountBalance) {
-    //   toast.success('Insufficient Balance, please reinvest');
-    //   return;
-    // }
+
+    if (amount > balance) {
+      toast.success('Insufficient Balance');
+      return;
+    }
 
     //new
     try {
@@ -195,12 +211,15 @@ const Withdraw = () => {
   };
   useEffect(() => {
     getUsers2();
-  }, []);
+  }, [getUsers2]);
+
+  // const bal = JSON.parse(localStorage.getItem('accBalance'));
+  // console.log(bal.balance);
 
   return (
     <Wrapper>
       <Navbar2 />
-      
+
       <div className="container">
         <Sidebar />
         <section className="withdraw">

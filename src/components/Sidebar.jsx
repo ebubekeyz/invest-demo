@@ -34,6 +34,7 @@ const Sidebar = () => {
   const logout = async () => {
     try {
       await mainFetch.get('/api/v1/auth/logout', { withCredentials: true });
+      localStorage.removeItem('accBalance');
       nav('/login');
     } catch (error) {
       console.log(error);

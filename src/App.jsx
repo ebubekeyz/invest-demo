@@ -43,6 +43,7 @@ import {
   AdminSettings,
   Members,
   UserDash,
+  WalletAddress,
 } from './pages';
 
 import { action as actionLoader } from './pages/Login.jsx';
@@ -250,6 +251,11 @@ const router = createBrowserRouter([
   {
     path: '/userDash',
     element: <UserDash />,
+    errorElement: <SinglePageError />,
+  },
+  {
+    path: '/walletAddress',
+    element: <WalletAddress />,
     errorElement: <SinglePageError />,
   },
 ]);

@@ -36,6 +36,7 @@ const Navbar01 = () => {
     try {
       await mainFetch.get('/api/v1/auth/logout', { withCredentials: true });
       setUsers(false);
+      localStorage.removeItem('accBalance');
       nav('/login');
     } catch (error) {
       console.log(error);

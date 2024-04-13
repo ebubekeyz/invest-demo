@@ -11,6 +11,7 @@ export { default as AdminDash } from './AdminDash';
 export { default as EditUser } from './EditUser';
 export { default as DeleteUser } from './DeleteUser';
 export { default as AdminDeposit } from './AdminDeposit';
+export { default as WalletAddress } from './WalletAddress';
 
 export { default as SinglePageError } from './SinglePageError';
 export { default as About } from './About';

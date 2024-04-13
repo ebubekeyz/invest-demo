@@ -38,6 +38,7 @@ const Navbar3 = () => {
     try {
       await mainFetch.get('/api/v1/auth/logout', { withCredentials: true });
       setUsers(false);
+      localStorage.removeItem('accBalance');
       nav('/login');
     } catch (error) {
       console.log(error);
@@ -112,6 +113,12 @@ const Navbar3 = () => {
               <li>
                 <NavLink to="/adminDeposit" className="link-btn">
                   Pending Deposit
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/walletAddress" className="link-btn">
+                  Change Wallet Address
                 </NavLink>
               </li>
 

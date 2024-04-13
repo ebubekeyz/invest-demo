@@ -35,6 +35,7 @@ const Sidebar2 = () => {
   const logout = async () => {
     try {
       await mainFetch.get('/api/v1/auth/logout', { withCredentials: true });
+      localStorage.removeItem('accBalance');
       nav('/login');
     } catch (error) {
       console.log(error);
@@ -119,6 +120,19 @@ const Sidebar2 = () => {
               </span>
               <Link to="/adminWithdraw" className="tog-text">
                 Withdrawal Request
+              </Link>
+            </div>
+          </article>
+        </aside>
+
+        <aside id="dash2">
+          <article className="home">
+            <div className="tog">
+              <span>
+                <RiMoneyDollarBoxLine className="icon" />
+              </span>
+              <Link to="/walletAddress" className="tog-text">
+                Change Wallet Address
               </Link>
             </div>
           </article>

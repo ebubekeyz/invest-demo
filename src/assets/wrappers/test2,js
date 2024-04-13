@@ -243,7 +243,7 @@ const Dashboard = () => {
       try {
         const res = await mainFetch.patch(
           `/api/v1/payReceipt/${mainBalance.payId}`,
-          { balanceStatus: pend },
+          { status: pend },
           { withCredentials: true }
         );
 
@@ -508,12 +508,11 @@ const Dashboard = () => {
       profit() -
       percentageReduce -
       penaltyReduce -
-      totalWithdraw;
+      currWithdraw;
   }
+  console.log(mainAccountBalance);
 
-  // console.log(mainAccountBalance);
-
-  const [balance, setBalance] = useState('');
+  const [bal, setBal] = useState('');
   const postBalance = async () => {
     try {
       const response = await mainFetch.patch(
@@ -521,10 +520,10 @@ const Dashboard = () => {
         { balance: mainAccountBalance },
         { withCredentials: true }
       );
-
+      const pay = response.data.payReceipt;
       console.log(response.data.payReceipt);
-
-      setBalance(response.data.payReceipt.balance);
+      const { balance } = pay;
+      setBal(balance);
     } catch (error) {
       console.log(error);
     }
@@ -532,7 +531,7 @@ const Dashboard = () => {
   useEffect(() => {
     postBalance();
   }, [postBalance]);
-  console.log(balance);
+  // console.log(bal);
   // referral copy
   const [userIdd, setUserIdd] = useState('');
   const [username, setUsername] = useState('');
@@ -605,7 +604,7 @@ const Dashboard = () => {
     try {
       const res = await mainFetch.patch(
         `/api/v1/payReceipt/${mainBalance.payId}`,
-        { balanceStatus: 'confirmed' },
+        { status: 'confirmed' },
         { withCredentials: true }
       );
     } catch (error) {
@@ -762,7 +761,7 @@ const Dashboard = () => {
               <p>Account balance</p>
 
               {mainBalance.status === 'paid' ? (
-                <h4>{formatter.format(Number(balance).toFixed(2))}</h4>
+                <h4>{formatter.format(Number(bal).toFixed(2))}</h4>
               ) : (
                 <h4>{formatter.format(0)}</h4>
               )}
