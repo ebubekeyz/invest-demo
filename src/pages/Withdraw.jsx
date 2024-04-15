@@ -254,7 +254,7 @@ const Withdraw = () => {
                   Please fill your Wallet address details from your settings
                   before making withdrawal
                 </h6>
-                <h4>Coins</h4>
+                <h5>Coins</h5>
                 {/* <select
                   className="form-input"
                   id="select"

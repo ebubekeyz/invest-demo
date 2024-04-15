@@ -135,7 +135,9 @@ const UserDash = () => {
     fetchEarning();
   }, []);
 
-  const reduceEarning = earning.reduce((acc, curr) => {
+  const filterEarning = earning.filter((item) => item.userIdNumber === id);
+
+  const reduceEarning = filterEarning.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
 
@@ -207,7 +209,6 @@ const UserDash = () => {
     newPassword: '',
     password: '',
   });
-
 
   const handleSubmit1 = async (e) => {
     e.preventDefault();
@@ -539,10 +540,11 @@ const UserDash = () => {
     e.preventDefault();
     try {
       setIsLoad4('updating...');
-      const response = await mainFetch.patch(
-        `/api/v1/earning/${bonusId}`,
+      const response = await mainFetch.post(
+        `/api/v1/earning`,
         {
           amount: updateBonus.amount,
+          userIdNumber: id,
         },
         {
           withCredentials: true,
@@ -564,6 +566,7 @@ const UserDash = () => {
   // penalty
   const [penaltyId, setPenaltyId] = useState('');
   const [penaltyAmt, setPenaltyAmt] = useState('');
+  const [penalty2, setPenalty2] = useState([]);
 
   const fetchPenalty = async () => {
     try {
@@ -571,9 +574,9 @@ const UserDash = () => {
         `/api/v1/penalty/${id}/showUserPenalty`,
         { withCredentials: true }
       );
-      const penal = response.data.penalty;
-      const len = penal.length - 1;
-      const { _id, amount } = penal[len];
+
+      const { _id, amount } = response.data.penalty;
+      setPenalty2(response.data.penalty);
       setPenaltyId(_id);
       setPenaltyAmt(amount);
     } catch (error) {
@@ -585,14 +588,20 @@ const UserDash = () => {
     fetchPenalty();
   }, []);
 
+  const filterPenalty = penalty2.filter((item) => item.userIdNumber === id);
+  const reducePenalty = filterPenalty.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+console.log(reducePenalty)
   const handleSubmit6 = async (e) => {
     e.preventDefault();
     try {
       setIsLoad6('adding penalty...');
-      const response = await mainFetch.patch(
-        `/api/v1/penalty/${penaltyId}`,
+      const response = await mainFetch.post(
+        `/api/v1/penalty`,
         {
           amount: penalty.amount,
+          userIdNumber: id,
         },
         {
           withCredentials: true,
@@ -774,7 +783,7 @@ const UserDash = () => {
     try {
       setIsLoad9('Balance Removing...');
       const response = await mainFetch.delete(
-        `/api/v1/earning/${id}/deleteUserEarning`,
+        `/api/v1/earning/${id}/deleteUserIdNumber`,
         { withCredentials: true }
       );
       setIsLoad9('Balance Removed');
@@ -794,7 +803,7 @@ const UserDash = () => {
     try {
       setIsLoad11('Penalty Removing...');
       const response = await mainFetch.delete(
-        `/api/v1/penalty/${id}/deleteUserPenalty`,
+        `/api/v1/penalty/${id}/deleteUserIdNumber`,
         { withCredentials: true }
       );
       setIsLoad11('Penalty Removed');
@@ -835,7 +844,7 @@ const UserDash = () => {
   const three = async () => {
     try {
       const response = await mainFetch.delete(
-        `/api/v1/earning/${id}/deleteUserEarning`,
+        `/api/v1/earning/${id}/deleteUserIdNumber`,
         { withCredentials: true }
       );
     } catch (error) {
@@ -846,7 +855,7 @@ const UserDash = () => {
   const five = async () => {
     try {
       const response = await mainFetch.delete(
-        `/api/v1/penalty/${id}/deleteUserPenalty`,
+        `/api/v1/penalty/${id}/deleteUserIdNumber`,
         { withCredentials: true }
       );
     } catch (error) {
@@ -951,8 +960,7 @@ const UserDash = () => {
     }
   };
 
-
-    const one16 = async () => {
+  const one16 = async () => {
     try {
       const response = await mainFetch.delete(
         `/api/v1/profit/${id}/deleteUserProfit`,
@@ -964,10 +972,18 @@ const UserDash = () => {
   };
   const deleteUser = (e) => {
     e.preventDefault();
-    Promise.all([one10(), one11(), one12(), one13(), one14(), one15(), one16()]);
+    Promise.all([
+      one10(),
+      one11(),
+      one12(),
+      one13(),
+      one14(),
+      one15(),
+      one16(),
+    ]);
   };
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   const showUserRef = async () => {
     try {
@@ -983,7 +999,6 @@ const UserDash = () => {
   useEffect(() => {
     showUserRef();
   }, [showUserRef]);
-
 
   const filterUser = users.filter((item) => item.referralId === `${username}`);
 
@@ -1107,6 +1122,18 @@ const UserDash = () => {
                   : formatter.format(Number(0).toFixed(2))}
               </h4>
               <p>ADDED BALANCE</p>
+            </div>
+          </div>
+
+          <div className="balance" id="main">
+            <IoPower className="power" />
+            <div className="amount">
+              <h4>
+                {earning
+                  ? formatter.format(Number(reducePenalty).toFixed(2))
+                  : formatter.format(Number(0).toFixed(2))}
+              </h4>
+              <p>TOTAL PENALTY</p>
             </div>
           </div>
 

@@ -7,6 +7,19 @@ import { Link } from 'react-router-dom';
 import Navbar3 from '../components/Navbar3';
 
 const AdminDeposit = () => {
+  let [pages, setPages] = useState([]);
+  const [index, setIndex] = useState(0);
+  const paginate = (data) => {
+    const itemsPerPage = 10;
+    const numberOfPages = Math.ceil(data.length / itemsPerPage);
+
+    const newData = Array.from({ length: numberOfPages }, (_, index) => {
+      const start = index * itemsPerPage;
+      return data.slice(start, start + itemsPerPage);
+    });
+    return newData;
+  };
+
   const [deposit, setDeposit] = useState([]);
   const payReceiptFunc = async () => {
     try {
@@ -31,6 +44,14 @@ const AdminDeposit = () => {
   const filterPending = deposit.filter((item) => item.status === 'pending');
   const filterPaid = deposit.filter((item) => item.status === 'paid');
 
+  const setPage = () => {
+    setPages(paginate(filterPaid));
+  };
+  useEffect(() => {
+    setPage();
+  }, []);
+
+  console.log(deposit);
   return (
     <Wrapper>
       <Navbar3 />
@@ -38,7 +59,7 @@ const AdminDeposit = () => {
         <Sidebar2 />
         <section className="deposit">
           <div className="table-wrapper">
-            <table class="fl-table">
+            <table className="fl-table">
               <thead>
                 <tr>
                   <th>S/N</th>

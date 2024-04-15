@@ -40,14 +40,13 @@ const Settings = () => {
       });
 
       setId(response.data.user.userId);
+      setUsername(response.data.user.username);
       setFullName(response.data.user.fullName);
       setEmail(response.data.user.email);
       setCity(response.data.user.city);
       setState(response.data.user.state);
       setCountry(response.data.user.country);
       setPhone(response.data.user.phone);
-
-      setUsername(response.data.user.fullName);
     } catch (error) {
       console.log(error);
     }
@@ -242,7 +241,6 @@ const Settings = () => {
     }
   };
 
-  
   const handleSubmitCity = async (e) => {
     e.preventDefault();
 

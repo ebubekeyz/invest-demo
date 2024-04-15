@@ -3,6 +3,32 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   background: rgb(39, 37, 37);
   padding-bottom: 8rem;
+  .page-btn {
+    width: 2rem;
+    height: 2rem;
+    background: var(--clr-primary-7);
+    border-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.5rem;
+    transition: var(--transition);
+  }
+  .active-btn {
+    background: var(--clr-primary-1);
+    color: var(--clr-white);
+  }
+  .prev-btn,
+  .next-btn {
+    background: transparent;
+    border-color: transparent;
+    font-weight: bold;
+    text-transform: capitalize;
+    letter-spacing: var(--spacing);
+    margin: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
   @media screen and (min-width: 800px) {
     .admin {
       width: 100%;

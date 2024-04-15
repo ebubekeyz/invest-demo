@@ -221,8 +221,6 @@ const Dashboard = () => {
   // console.log(moment(newDate).format('DD HH:mm:ss'));
   // console.log(moment(mainBalance.createdAt).format('DD HH:mm:ss'));
 
- 
-
   let profit = () => {
     let num = calculateTotalPercent();
 
@@ -316,7 +314,9 @@ const Dashboard = () => {
     fetchEarning();
   }, [fetchEarning]);
 
-  const earningReduce = earning.reduce((acc, curr) => {
+  const filterEarning = earning.filter((item) => item.userIdNumber === userId);
+
+  const earningReduce = filterEarning.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
 
@@ -341,43 +341,10 @@ const Dashboard = () => {
     fetchPenalty();
   }, [fetchPenalty]);
 
-  const penaltyReduce = penalty.reduce((acc, curr) => {
+  const filterPenalty = penalty.filter((item) => item.userIdNumber === userId);
+  const penaltyReduce = filterPenalty.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
-
-  const postEarning = async () => {
-    try {
-      const response = await mainFetch.post(
-        '/api/v1/earning',
-        { amount: 0 },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    postEarning();
-  }, []);
-
-  const postPenalty = async () => {
-    try {
-      const response = await mainFetch.post(
-        '/api/v1/penalty',
-        { amount: 0 },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    postPenalty();
-  }, []);
-
-  // end penalty
 
   // curr withdraw
   const [currWithdraw, setCurrWithdraw] = useState([]);
@@ -491,8 +458,6 @@ const Dashboard = () => {
         { balance: userAccount },
         { withCredentials: true }
       );
-
-    
     } catch (error) {
       console.log(error);
     }
@@ -555,24 +520,6 @@ const Dashboard = () => {
     toast.success(`You have copied ${userIdd}`);
   };
 
-  // const postBalance2 = async () => {
-  //   try {
-  //     const main = mainAccountBalance + percentageReduce;
-  //     const response = await mainFetch.patch(
-  //       `/api/v1/payReceipt/${mainBalance.payId}`,
-  //       { balance: main },
-  //       { withCredentials: true }
-  //     );
-
-  //     setBalance(response.data.payReceipt.balance);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   postBalance2();
-  // }, [postBalance2]);
-
   const [isInvest, setIsInvest] = useState('reinvest');
 
   const one = async () => {
@@ -629,7 +576,17 @@ const Dashboard = () => {
   const four = async () => {
     try {
       const response = await mainFetch.delete(
-        `/api/v1/earning/${userId}/deleteUserEarning`,
+        `/api/v1/earning/${userId}/deleteUserIdNumber`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const five = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/penalty/${userId}/deleteUserIdNumber`,
         { withCredentials: true }
       );
     } catch (error) {
@@ -637,19 +594,9 @@ const Dashboard = () => {
     }
   };
 
-  // const six = async () => {
-  //   try {
-  //     const response = await mainFetch.delete(
-  //       `/api/v1/penalty/${userId}/deleteUserPenalty`,
-  //       { withCredentials: true }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const reinvestFunc = (e) => {
     e.preventDefault();
-    Promise.all([one(), one111(), two(), three(), four()]);
+    Promise.all([one(), one111(), two(), three(), four(), five()]);
   };
 
   const one1 = async () => {
@@ -678,7 +625,7 @@ const Dashboard = () => {
   const three1 = async () => {
     try {
       const response = await mainFetch.delete(
-        `/api/v1/earning/${userId}/deleteUserEarning`,
+        `/api/v1/earning/${userId}/deleteUserIdNumber`,
         { withCredentials: true }
       );
     } catch (error) {
@@ -697,21 +644,21 @@ const Dashboard = () => {
     }
   };
 
-  // const six1 = async () => {
-  //   try {
-  //     const response = await mainFetch.delete(
-  //       `/api/v1/penalty/${userId}/deleteUserPenalty`,
-  //       { withCredentials: true }
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const six1 = async () => {
+    try {
+      const response = await mainFetch.delete(
+        `/api/v1/penalty/${userId}/deleteUserIdNumber`,
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const nav = useNavigate();
   const upgrade = (e) => {
     e.preventDefault();
-    Promise.all([one1(), two1(), three1(), five1()]).then(() =>
+    Promise.all([one1(), two1(), three1(), five1(), six1()]).then(() =>
       nav('/investDash')
     );
   };
