@@ -228,13 +228,18 @@ const Dashboard = () => {
       moment().format('DD') >=
       moment(amount.update).add(mainBalance.days, 'days').format('DD');
 
-    return check === true && num;
+    return check === true ? num : 0;
   };
   useEffect(() => {
     profit();
   }, [profit]);
 
-  if (profit !== 0) {
+  console.log(profit());
+  // let prof = profit();
+
+  // console.log(mainBalance.payId);
+
+  if (profit() !== 0) {
     const amountStat = async () => {
       const pend = 'pending';
       try {
@@ -250,11 +255,8 @@ const Dashboard = () => {
         console.log(error);
       }
     };
-
-    useEffect(() => {
-      amountStat();
-    }, []);
   }
+
   const postProfit = async () => {
     try {
       const response = await mainFetch.post(
@@ -430,7 +432,7 @@ const Dashboard = () => {
       penaltyReduce -
       totalWithdraw;
   }
-
+  console.log(mainAccountBalance);
   const [userIdd, setUserIdd] = useState('');
   const [username, setUsername] = useState('');
   const fetchUser = async () => {
@@ -512,7 +514,7 @@ const Dashboard = () => {
   useEffect(() => {
     postBalance();
   }, [postBalance]);
-
+  console.log(balance);
   // referral copy
 
   const copyReferral = () => {
