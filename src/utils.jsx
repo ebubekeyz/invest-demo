@@ -104,28 +104,28 @@ export const questions = [
   },
 ];
 
-// export const coinFetch = axios.create({
-//   baseURL: 'https://invest-demo-server.onrender.com',
-//   headers: {
-//     Accept: 'application/json',
-//   },
-// });
 export const coinFetch = axios.create({
-  baseURL: 'http://localhost:5200',
+  baseURL: 'https://invest-demo-server.onrender.com',
   headers: {
     Accept: 'application/json',
   },
 });
-
-// export const mainFetch = axios.create({
-//   baseURL: 'https://invest-demo-server.onrender.com',
+// export const coinFetch = axios.create({
+//   baseURL: 'http://localhost:5200',
 //   headers: {
 //     Accept: 'application/json',
 //   },
 // });
+
 export const mainFetch = axios.create({
-  baseURL: 'http://localhost:5200',
+  baseURL: 'https://invest-demo-server.onrender.com',
   headers: {
     Accept: 'application/json',
   },
 });
+// export const mainFetch = axios.create({
+//   baseURL: 'http://localhost:5200',
+//   headers: {
+//     Accept: 'application/json',
+//   },
+// });
