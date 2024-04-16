@@ -915,11 +915,7 @@ const Dashboard = () => {
                 <GiTwoCoins className="icon-main" id="icon4" />
               </span>
               <h5>Referral Earn</h5>
-              {earning.length !== 0 ? (
-                <h4>{formatter.format(Number(percentageReduce).toFixed(2))}</h4>
-              ) : (
-                <h4>{formatter.format(Number(0).toFixed(2))}</h4>
-              )}
+              <h4>{formatter.format(Number(percentageReduce).toFixed(2))}</h4>
             </article>
           </div>
         </section>
