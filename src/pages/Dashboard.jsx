@@ -234,11 +234,6 @@ const Dashboard = () => {
     profit();
   }, [profit]);
 
-  console.log(profit());
-  // let prof = profit();
-
-  // console.log(mainBalance.payId);
-
   if (profit() !== 0) {
     const amountStat = async () => {
       const pend = 'pending';
@@ -256,7 +251,6 @@ const Dashboard = () => {
       }
     };
   }
-
   const postProfit = async () => {
     try {
       const response = await mainFetch.post(
@@ -432,7 +426,7 @@ const Dashboard = () => {
       penaltyReduce -
       totalWithdraw;
   }
-  console.log(mainAccountBalance);
+
   const [userIdd, setUserIdd] = useState('');
   const [username, setUsername] = useState('');
   const fetchUser = async () => {
@@ -442,7 +436,7 @@ const Dashboard = () => {
       });
       const { username } = response.data.user;
       setUsername(username);
-      setUserIdd(`https://trex-holding.com/register/${username}`);
+      setUserIdd(`https://invest-demo-site.netlify.app/register/${username}`);
     } catch (error) {
       console.log(error);
       console.log(error.response.data.msg);
@@ -490,11 +484,27 @@ const Dashboard = () => {
 
   // end referral
 
+  console.log(filterUser);
   const reduceFilterUserBalance = filterUser.reduce((acc, curr) => {
     return acc + curr.balance;
   }, 0);
 
   const percentageReduce = (reduceFilterUserBalance * 10) / 100;
+
+  const postUserBalance2 = async () => {
+    try {
+      const response = await mainFetch.patch(
+        `/api/v1/users/${userId}`,
+        { balance: userAccount + percentageReduce },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    postUserBalance2();
+  }, [postUserBalance2]);
 
   const [balance, setBalance] = useState('');
   const postBalance = async () => {
@@ -514,7 +524,7 @@ const Dashboard = () => {
   useEffect(() => {
     postBalance();
   }, [postBalance]);
-  console.log(balance);
+
   // referral copy
 
   const copyReferral = () => {
