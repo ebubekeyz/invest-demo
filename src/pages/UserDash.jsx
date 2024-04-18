@@ -96,8 +96,10 @@ const UserDash = () => {
         `/api/v1/profit/${id}/showUserProfit`,
         { withCredentials: true }
       );
-
-      setProfit(response.data.profit);
+      const getProf = response.data.profit;
+      const len = getProf.length - 1;
+      const { amount } = getProf[len];
+      setProfit(amount);
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +108,9 @@ const UserDash = () => {
     fetchProfit();
   }, []);
 
-  const reduceProfit = profit.reduce((acc, curr) => {
-    return acc + curr.amount;
-  }, 0);
+  // const reduceProfit = profit.reduce((acc, curr) => {
+  //   return acc + curr.amount;
+  // }, 0);
 
   // end profit
 
@@ -592,7 +594,7 @@ const UserDash = () => {
   const reducePenalty = filterPenalty.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
-console.log(reducePenalty)
+  console.log(reducePenalty);
   const handleSubmit6 = async (e) => {
     e.preventDefault();
     try {
@@ -679,9 +681,14 @@ console.log(reducePenalty)
     return acc + amt;
   }, 0);
 
+  const reducePaidProfit = paidDeposit.reduce((acc, curr) => {
+    return acc + curr.profit;
+  }, 0);
+
   const [currentDeposit, setCurrentDeposit] = useState({
     amount: '',
     status: '',
+    profit: '',
     plan: '',
     createdAt: '',
     days: '',
@@ -698,6 +705,7 @@ console.log(reducePenalty)
       const {
         createdAt,
         status,
+        profit,
         amount: {
           amount: amt,
           coin: {
@@ -709,6 +717,7 @@ console.log(reducePenalty)
       setCurrentDeposit({
         amount: amt,
         status: status,
+        profit: profit,
         plan: plan,
         days: days,
         createdAt: createdAt,
@@ -1140,7 +1149,7 @@ console.log(reducePenalty)
           <div className="balance" id="main">
             <IoPower className="power" />
             <div className="amount">
-              <h4>{formatter.format(Number(reduceProfit).toFixed(2))}</h4>
+              <h4>{formatter.format(Number(profit).toFixed(2))}</h4>
               <p>TOTAL PROFIT</p>
             </div>
           </div>

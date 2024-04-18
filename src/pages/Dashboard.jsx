@@ -54,6 +54,8 @@ const Dashboard = () => {
     investId: '',
     balanceStatus: '',
     balance: '',
+    refBonus: '',
+    profit: '',
   });
   const fetchMainBalance = async () => {
     try {
@@ -73,6 +75,8 @@ const Dashboard = () => {
         status,
         balance,
         balanceStatus,
+        refBonus,
+        profit,
         _id: payId,
         amount: {
           amount: amt,
@@ -93,6 +97,7 @@ const Dashboard = () => {
       } = bal[length];
       setMainBalance({
         payId: payId,
+        refBonus: refBonus,
         receipt: receipt,
         coinId: coinId,
         investId: investId,
@@ -107,6 +112,7 @@ const Dashboard = () => {
         createdAt: createdAt,
         balance: balance,
         balanceStatus: balanceStatus,
+        profit: profit,
       });
     } catch (error) {
       console.log(error);
@@ -251,20 +257,6 @@ const Dashboard = () => {
       }
     };
   }
-  const postProfit = async () => {
-    try {
-      const response = await mainFetch.post(
-        '/api/v1/profit',
-        { amount: profit() },
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    postProfit();
-  }, [postProfit]);
 
   // end main balance
 
@@ -427,6 +419,7 @@ const Dashboard = () => {
       totalWithdraw;
   }
 
+  
   const [userIdd, setUserIdd] = useState('');
   const [username, setUsername] = useState('');
   const fetchUser = async () => {
@@ -484,12 +477,37 @@ const Dashboard = () => {
 
   // end referral
 
-  console.log(filterUser);
   const reduceFilterUserBalance = filterUser.reduce((acc, curr) => {
     return acc + curr.balance;
   }, 0);
 
-  const percentageReduce = (reduceFilterUserBalance * 10) / 100;
+  let percentageRed;
+
+  if (mainBalance.balanceStatus === 'confirmed') {
+    percentageRed = 0;
+  } else if (mainBalance.balanceStatus === 'pending') {
+    percentageRed = (reduceFilterUserBalance * 10) / 100;
+  }
+
+  const [percentageReduce, setPercentageReduce] = useState('');
+
+  const postReferral = async () => {
+    try {
+      const response = await mainFetch.patch(
+        `/api/v1/payReceipt/${mainBalance.payId}`,
+        { refBonus: percentageRed },
+        { withCredentials: true }
+      );
+      setPercentageReduce(response.data.payReceipt.refBonus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    postReferral();
+  }, [postReferral]);
+
+  console.log(percentageReduce);
 
   const postUserBalance2 = async () => {
     try {
@@ -505,6 +523,91 @@ const Dashboard = () => {
   useEffect(() => {
     postUserBalance2();
   }, [postUserBalance2]);
+
+  // const t1 = 0;
+  // const t2 = 6;
+  // const t3 = 0;
+
+  // if (t1 !== 0 || t2 !== 0 || t3 !== 0) {
+  //   console.log('hello');
+  // }
+  const postProfit = async () => {
+    try {
+      const response = await mainFetch.post(
+        `/api/v1/profit`,
+        { amount: 0 },
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    postProfit();
+  }, []);
+
+  const [fetchProfit, setFetchProfit] = useState(0);
+  const [profId, setProfId] = useState('');
+  const getProfit = async () => {
+    try {
+      const response = await mainFetch.get(
+        `/api/v1/profit/${userId}/showUserProfit`,
+        {
+          withCredentials: true,
+        }
+      );
+      const getProf = response.data.profit;
+      const len = getProf.length - 1;
+      const { amount, _id } = getProf[len];
+      setFetchProfit(amount);
+      setProfId(_id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProfit();
+  }, [getProfit]);
+
+  console.log(profit(), earningReduce, percentageReduce);
+  console.log(userId);
+  const patchProfit = async () => {
+    const prof2 = profit() + earningReduce + percentageReduce;
+    try {
+      const response = await mainFetch.patch(
+        `/api/v1/profit/${profId}`,
+        { amount: prof2 },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    patchProfit();
+  }, [patchProfit]);
+
+  // const postProfit = async () => {
+  //   const prof2 = profit() + earningReduce + percentageReduce;
+  //   try {
+  //     const response = await mainFetch.patch(
+  //       `/api/v1/profit/${mainBalance.payId}`,
+  //       { profit: prof2 },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   postProfit();
+  // }, [postProfit]);
+
+  console.log(earningReduce + profit() + percentageReduce);
 
   const [balance, setBalance] = useState('');
   const postBalance = async () => {
@@ -563,6 +666,31 @@ const Dashboard = () => {
       console.log(error);
     }
   };
+
+  // const one1111 = async () => {
+  //   try {
+  //     const res = await mainFetch.patch(
+  //       `/api/v1/payReceipt/${mainBalance.payId}`,
+  //       { profit: 0 },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const two11 = async () => {
+  //   try {
+  //     const res = await mainFetch.patch(
+  //       `/api/v1/payReceipt/${mainBalance.payId}`,
+  //       { balance: 0 },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const two = async () => {
     try {
       const response = await mainFetch.delete(
@@ -584,6 +712,18 @@ const Dashboard = () => {
       console.log(error);
     }
   };
+
+  // const three11 = async () => {
+  //   try {
+  //     const res = await mainFetch.patch(
+  //       `/api/v1/payReceipt/${mainBalance.payId}`,
+  //       { refBonus: 0 },
+  //       { withCredentials: true }
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const four = async () => {
     try {
@@ -608,7 +748,7 @@ const Dashboard = () => {
 
   const reinvestFunc = (e) => {
     e.preventDefault();
-    Promise.all([one(), one111(), two(), three(), four(), five()]);
+    Promise.all([one(), three(), one111(), two(), four(), five()]);
   };
 
   const one1 = async () => {
@@ -674,6 +814,8 @@ const Dashboard = () => {
       nav('/investDash')
     );
   };
+
+  const mainProfit = profit() + earningReduce + percentageReduce;
 
   return (
     <Wrapper>
@@ -745,7 +887,7 @@ const Dashboard = () => {
                 <p>Total profit</p>
 
                 {mainBalance.status === 'paid' ? (
-                  <h4>{formatter.format(Number(profit()).toFixed(2))}</h4>
+                  <h4>{formatter.format(Number(fetchProfit).toFixed(2))}</h4>
                 ) : (
                   <h4>{formatter.format(Number(0).toFixed(2))}</h4>
                 )}
@@ -915,6 +1057,7 @@ const Dashboard = () => {
                 <GiTwoCoins className="icon-main" id="icon4" />
               </span>
               <h5>Referral Earn</h5>
+
               <h4>{formatter.format(Number(percentageReduce).toFixed(2))}</h4>
             </article>
           </div>
@@ -926,3 +1069,5 @@ const Dashboard = () => {
   );
 };
 export default Dashboard;
+
+
